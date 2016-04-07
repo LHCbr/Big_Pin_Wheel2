@@ -1,0 +1,146 @@
+//
+//  BigPinWheel.pch
+//  BigPinwheel
+//
+//  Created by 徐伟 on 16/1/18.
+//  Copyright © 2016年 leita. All rights reserved.
+//
+
+#ifndef BigPinWheel_pch
+#define BigPinWheel_pch
+
+
+#define kAfterDelayTime     1.0
+#define kTimeoutInterval    20
+#define kConnectFailue      -1
+#define kConnectNoNetwork   -99
+#define kRequestFailed      -98
+#define kPhoneArea          @"86"
+#define kUpdateOnlineStatus   @"updateOnlineStatus"
+#define kGetGroupMemberListRet @"getgroupmemberlistret"
+
+
+/// 数据请求和发送消息的宏定义
+#define kModelPhone                 @"modelPhone"
+#define kModelArea                  @"modelArea"
+#define kModelLastId                @"modelLastId"
+#define kModelSerialId              @"modelSerialId"
+#define kModelDataType              @"modelDataType"
+#define kModelMessage               @"modelMessage"
+#define kModelSoundTime             @"modelSoundTime"
+#define kModelStartLongitude        @"modelStartLongitude"
+#define kModelStartLatitude         @"modelStartLatitude"
+#define kModelStopLongtidue         @"modelStopLongitude"
+#define kModelStopLatitude          @"modelStopLatitude"
+
+#define inspIsPad          (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+
+///视图的一些定义
+#define COLOR(R,G,B,A)     [UIColor colorWithRed:R/255.0 green:G/255.0 blue:B/255.0 alpha:A]
+#define kThemeColor        COLOR(255,214,94,1)
+#define kBGColor           COLOR(239,239,244,1)
+
+#define kDeviceWidth       [UIScreen mainScreen].bounds.size.width
+#define kDeviceHeight      [UIScreen mainScreen].bounds.size.height
+#define kCellHeight        85.5f
+//#define kPopOffSetX        288.0f
+#define kPopOffSetX        kDeviceWidth *288/375
+
+#define CELL_WIDTH               self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0);
+#define kDefaultAvatarImage      [UIImage imageNamed:@"0223_chatlistAvatar_default"]
+
+///找朋友数据筛选字典key
+#define kFilterData                 @"kfilterData"
+#define kFilterDataChange           @"kfilterDataChange"
+#define kRefreshProfileCell         @"krefreshProfileCell"
+
+
+///存放本地文件的各种路径
+#define kRootFilePath      [NSString stringWithFormat :@"%@/Library/Root",NSHomeDirectory()]
+//所有好友头像的路径
+#define kPathAvatar        [NSString stringWithFormat :@"%@/Library/Root/LocalAvatar",NSHomeDirectory()]
+//所有视频的路径(非聊天)
+#define kPathVideo         [NSString stringWithFormat :@"%@/Library/Root/Video",NSHomeDirectory()]
+//所有图片的路径(非聊天)
+#define kPathPicture       [NSString stringWithFormat :@"%@/Library/Root/Picture",NSHomeDirectory()]
+//所有声音的路径(非聊天)
+#define kPathVoice         [NSString stringWithFormat :@"%@/Library/Root/Voice",NSHomeDirectory()]
+//聊天的内存存储目录
+#define kPathChat          [NSString stringWithFormat :@"%@/Library/Root/Chat",NSHomeDirectory()]
+//kplist路径
+#define kPathPlist         [NSString stringWithFormat :@"%@/Library/Root/Plist",NSHomeDirectory()]
+
+
+///是否记住密码 1为记住 2为不记住
+#define kRemeberPassword            @"isRemeberPassword"
+
+///是否默认为空
+#define kDefaultNull                @"(null)"
+
+
+///socket
+#define kUserInfo                   @"myUserInfo"
+#define kUserName                   @"myUserName"
+#define kPassword                   @"myPassword"
+#define kNickName                   @"myNickName"
+#define kFriendLastUpdateTime       @"FriendLastUpdateTime"
+
+///基础通知
+#define kNetworkChange              @"NetowrkDidChangedNoti"
+#define kSelectedBgName             @"selectedBgName"
+
+/// 普通通知
+#define kPhoneContactsResponse      @"phonecontactResponse"
+#define kLogOutNotification         @"logoutnotification"
+#define kUpdateAllCount             @"updateAllCount"
+#define kLoginSuccess               @"login success"
+#define kBadgeChange                @"badeg change"
+
+/// 关于联系人的通知
+#define kFriendFanIdoCount          @"friendFanIdolCout"
+#define kBackSelfInfo               @"backSelfInfo"
+#define kBackDFCSelfInfo            @"backDFCInfo"
+#define kUpdateFriendList           @"updateFriendList"
+#define kGetDfCOtherUserInfo        @"kGetDFCOtherUserInfo"
+#define kUpdateDFCInfoSuccess       @"kUpateDFCInfoSuccess"
+
+/// 关于上传下载的
+#define kUploadFileName             @"uploadFileName"
+#define kUploadFileType             @"uploadFileType"
+#define kUploadFilePath             @"kUploadFilePath"
+
+/// 关于消息
+#define kRefreshMessageList         @"refreshMessageList"
+#define kRefreshNearMessageList     @"refreshNearMessageList"
+#define kDeleteMe                   @"deleteMe"
+#define kRootMessageTipCount        @"rootMessageTipCount"
+#define kRootGiraffeTipCount        @"rootGiraffeTipCount"
+#define kRootUpdateTipCount         @"rootUpdateTipCount"
+#define kUpdateGiraffeCount         @"updateGiraffeCount"
+
+/// 关于播放声音
+#define kAudioReceiveMessage        @"sound_message.mp3"
+#define kAudioReceiveSystem         @"sound_system.mp3"
+#define kAudioReceiveOther          @"sound_friend.mp3"
+
+/// 关于地图的
+#define kTapMapAction               @"tapMapAction"
+#define kLocationNewCity            @"locationNewCity"
+#define kUpdateRangeUserCount       @"updateRangeUserCount"
+#define kFirstRangeVideoList        @"firstRangeVideoList"
+#define kUpdateRequestAddress       @"updateRequestAddress"
+
+
+
+
+
+#endif /* BigPinWheel_pch */
+
+#define NAVBAR(titleName)\
+self.automaticallyAdjustsScrollViewInsets = NO;\
+self.view.backgroundColor = kBGColor;\
+self.navigationItem.title = titleName;\
+self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor], NSForegroundColorAttributeName, nil, nil];\
+self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];\
+[self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
+

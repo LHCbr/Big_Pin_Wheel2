@@ -1,0 +1,997 @@
+﻿根据不同平台修改宏:
+#define RUN_ON_ANDROID		0 // 是否运行在安卓平台 1是 0否
+
+短信接口：
+html测试地址:http://115.28.49.135/msg/mo_sms_post.html
+代码提交地址:http://115.28.49.135/msg/send_sms_utf8.php
+Key : D20CC38753F4759417F4F37B5248C3F7
+
+#if RUN_ON_ANDROID
+// 装载
+// 成功返回0，错误返回负值
+int im_c_Load(JavaVM *_JavaVM);
+
+
+// 初始化
+// 传入服务器IP和端口，以及各种回调函数
+// 成功返回0，错误返回负值
+int im_c_Init(JNIEnv *_jniEnv, char *_pcIp, int _iPort, char *_pcFileSvrIp, int _iFileSvrPort);
+#else
+int im_c_Init(char *_pcIp, int _iPort, char *_pcFileSvrIp, int _iFileSvrPort, FImCallback _ptCallbackFunc);
+#endif
+
+
+// 判断当前连接是否有效
+// 0 正常，其他值连接断开
+int im_c_IsConnected();
+
+
+// 用户登陆
+// _llUser 用户名
+// _pcPsw 密码
+// _llLastTime 好友列表更新时间
+// 成功返回0，错误返回负值
+int im_c_Login(uint16_t _iArea, uint64_t _llUser, char *_pcPsw, uint32_t _llLastTime);
+//宏: _FUN_LOGIN					= 0x2,		// 登陆
+//json : {"fun":"2","ret":"0","serial":"0"}
+//宏: IM_FUN_FRIEND_LIST					= 0x61,		// 获取好友列表
+//JsonString:{"friend_count":"1","friend_list":[{"user_area":"86","user_id":"13459259877"}],"type":"1"}
+
+
+// 用户登出
+int im_c_Logout();
+//宏: IM_FUN_STATE						= 0xE4,		// 返回状态    
+//JsonString:{"additional":"0","ret":"0","state":"10"}
+//satae : IM_STATE_CLOSE				= 10,	// 连接已失效，关闭
+
+
+/** @brief    用户注册
+  * @param[in]  _iArea	 国际区号，最多四位
+  * @param[in]  _llUser	 用户名
+  * @param[in]  _pcPsw	 密码
+  * @param[in]  _pcVerCode	 验证码
+  * @param[in]  _pcDeviceKey    设备唯一key
+  * @param[in]  _pcOSType	 系统型号
+  * @param[in]  _pcOSVer	 系统版本
+  * @param[in]  _pcPhoneType    手机类型/ Andriod / iOS
+  * @return  成功返回0，错误返回负值
+  */
+int im_c_Register(uint16_t _iArea, uint64_t _llUser, char *_pcPsw, char *_pcVerCode
+  , char *_pcDeviceKey, char *_pcOSType, char *_pcOSVer, char *_pcPhoneType);
+  
+ // 上传token
+// _pcToken iOS设备的token
+int im_c_UpdateToken(char *_pcToken);
+//宏:IM_FUN_UPDATE_TOKEN					= 0x9,		// 更新token
+//JsonString:{"fun":"9","ret":"0","serial":"2"}
+
+//************************************
+// Method:    im_c_ReportLocation	报告位置信息
+// FullName:  im_c_ReportLocation
+// Access:    public 
+// Returns:   int	成功返回0，错误返回负值
+// Qualifier:
+// Parameter: float _J	经度
+// Parameter: float _W	纬度
+//************************************
+int im_c_ReportLocation(float _J, float _W);
+//宏:IM_FUN_LOCATION						= 0x91,		// 报告个人位置信息
+//JsonString:{"fun":"145","ret":"0","serial":"15"}
+
+
+////////////////////////////////2015-11-5/////////////////////////////////////////////////
+/** @brief    更新用户个人资料
+  * @param[in]  _iType  用户资料类型，详细请查看TImUserInfoType 目前只有IM_USER_INFO_ALL可以用了
+  * @param[in]  _pcData 个人资料具体内容
+  */
+int im_c_UpdateUserInfo(int _iType, char *_pcData);
+//宏:IM_FUN_UPDATE_INFO					= 0x7,		// 更新个人详细信息
+//_iType ： IM_USER_INFO_ALL		
+	//更新个人资料，提交的内容：{"nick_name":“momo","sex":"1","birthday":"1985-12-12","head_portrait":"/home/123.jpg","signature":"很有个性的修改签名","identity":"2"};
+//_iType ： IM_USER_INFO_ADDRESS	
+// phone_show_flag  0, 不显示   1，显示	
+	//更新个人地址，提交的内容：{"country":"中国","province":"广东省","city":"阳江市","region":"阳西县","remaining_addr":"2区XXXXXXXXXX","longitude":"116.342304","latitude":"39.732280", "phone":"15862435423", "phone_show_flag":"0"};
+//JsonString:{"fun":"7","ret":"0","serial":"15"}
+
+//顺带会返回两个方法，
+//宏: IM_FUN_GET_USER_INFO				= 0x62,		// 查看用户详细信息
+//JsonString: {"birthday":"1985-12-12","head_portrait":"/home/123.jpg","nickname":"momo","phone_area":"86","phone_num":"13459259875","ret":"0","sex":"1","signature":"很有个性的修改签名","identity":"1(可选字段，身份ID，1是农民，2是司机，为兼容以前的系统可以不写，不写的话是默认成0)"}
+//宏: IM_FUN_STATE						= 0xE4,		// 返回状态
+//JsonString:{"additional":"255","ret":"0","state":"13"} 其中additional是你们提交的更新数据，比如这次的是IM_USER_INFO_ALL
+
+
+
+
+// 上传一个文件
+// _uFileName 发送文件名，im_c_GetIndexLongLong 获取
+// _iFileType 文件类型			IM_DATA_TYPE_TEXT 			= 0x0, 		// 文字
+//								IM_DATA_TYPE_JS 			= 0x1, 		// js脚本
+//								IM_DATA_TYPE_AMR			= 0x2, 		// 声音
+//								IM_DATA_TYPE_PICTURE		= 0x3,		// 图片
+//								IM_DATA_TYPE_TXT_AND_PIC	= 0x4,		// 文字加表情
+//								IM_DATA_TYPE_MP4        	= 0x5,		// mp4视频
+// _pcData 数据
+// _iDataLen 数据长度
+// 成功返回0，错误返回负值
+int im_c_OtherUpLoad(uint64_t _llFileName, int32_t _iFileType, char *_pcData, uint32_t _iDataLen);
+//宏：IM_FUN_FILE_RE_FINISH
+//json: {"file_name":"3914472068503194870","file_path":"/home/nfs/data/1447206850/1447206850000.jpg"}
+
+// 取消上传
+int im_c_OtherCancleUpLoad();
+//会调用上传成功的回调，但是json中的file_path是空值
+
+// 获取发送进度
+// 返回值 ,正常:0-100 错误:负值
+int im_c_OtherGetUpLoadProgress();
+
+// 下载一个文件
+// _pcUrl 文件地址
+// 成功返回0，错误返回负值
+int im_c_OtherDownLoad(char *_pcUrl);
+//宏：IM_FUN_DOWNLOAD_RE_FINISH
+//json: {"download_url":"/home/nfs/data/1446700620/1446700620000.jpg"}
+//如果服务器没有这个文件，返回第五个参数为0
+
+// 取消下载
+int im_c_OtherCancleDownLoad();
+//没有回调
+
+
+// 返回下载进度
+int im_c_OtherGetDownLoadProgress()
+//没有回调
+
+
+//************************************
+// Method:    im_c_ResetPassWd 重置密码
+// FullName:  im_c_ResetPassWd
+// Access:    public 
+// Returns:   int	成功返回0，错误返回负值
+// Qualifier:
+// Parameter: uint16_t _iArea	国际区号
+// Parameter: uint64_t _llUser	手机号
+// Parameter: char * _pcPsw		新密码
+// Parameter: char * _pcCode	验证码
+//************************************
+int im_c_ResetPassWd(uint16_t _iArea, uint64_t _llUser, char *_pcPsw, char *_pcCode);
+//宏: IM_FUN_RESET_PASSWD 
+//json : "{"fun":"0x4","serial":"1","ret":"-2 密码跟之前的相同; -1 验证码过期或者不正确; 正数，修改成功"}"
+
+
+//************************************
+// Method:    im_c_ResetPswCheckCode	重置密码前检查验证码
+// FullName:  im_c_ResetPswCheckCode
+// Access:    public 
+// Returns:   int
+// Qualifier:
+// Parameter: uint16_t _iArea	国际区号
+// Parameter: uint64_t _llUser	手机号
+// Parameter: char * _pcCode	验证码
+//************************************
+int im_c_ResetPswCheckCode(uint16_t _iArea, uint64_t  _llUser, char *_pcCode);
+//宏: IM_FUN_RESET_PSW_CHECK 
+//json : "{"fun":"0x5","serial":"1","ret":"0 成功，-1 失败"}"
+
+
+//************************************
+// Method:    im_c_GetUserInfo 查看好友的详细信息
+// FullName:  im_c_GetUserInfo
+// Access:    public 
+// Returns:   int 成功返回0，错误返回负值
+// Qualifier:
+// Parameter: uint16_t _iArea 国际区号
+// Parameter: uint64_t _llUser 手机号
+//************************************
+int im_c_GetUserInfo(uint16_t _iArea, uint64_t _llUser);
+//宏：IM_FUN_GET_USER_INFO				= 0x62,		// 查看用户详细信息  
+//JsonString:
+//成功:{"birthday":"","head_portrait":"","nick_name":"","phone_area":"86","phone_num":"13459259876","ret":"0","sex":"0","signature":"","identity":"2","quoted_price":"550"}
+//失败:{"fun":"0x62","ret":"-1","serial":"15"}
+
+
+
+//************************************
+// Method:    im_c_AddFriend
+// FullName:  im_c_AddFriend	请求添加好友
+// Access:    public 
+// Returns:   int	成功返回0，错误返回负值
+// Qualifier:
+// Parameter: int64_t _iIndex	
+// Parameter: uint16_t _iArea 国际区号
+// Parameter: uint64_t _llUser	手机号
+// Parameter: char * _pcData	验证信息
+// Parameter: uint32_t _iDataLen	验证信息的长度
+//************************************
+int im_c_AddFriend(int64_t _iIndex, uint16_t _iArea, uint64_t _llUser, char *_pcData, uint32_t _iDataLen);
+//自己收到:
+//CallbackFun: IM_FUN_STATE						= 0xE4,		// 返回状态      
+//JsonString:{"additional":"33(-1失败，大于0是对应的_iDataType值之类的)","ret":"1114473844941740720","state":"98"}
+//对方收到:
+//宏: IM_FUN_SEND_USER					= 0x35,		// 向用户发送消息,带主账号功能
+//JsonString:{"additional":"0","data":"61646420667269656E64206D736720666F7220746","data_len":"46","data_type":"33","dst_area":"86","dst_user":"13459259876","index":"2914473837673760800","src_area":"86","src_user":"13459259875","time":"1447383767"}
+
+/*
+state 是下面的量之一
+// 状态
+enum TImState
+{
+	IM_STATE_CONNECTED			= 0x9,	// 连上服务器了
+	IM_STATE_CLOSE				= 0xA,	// 连接已失效，关闭
+	IM_STATE_RE_LOGIN			= 0xB,	// 你在另处登录，被踢下线
+	IM_STATE_NO_LOGIN			= 0xC,	// 连接后，未登录
+    IM_STATE_UPDATE_USER_INFO	= 0xD,	// 更新个人资料后的状态返回
+
+	IM_STATE_MSG_CHECK			= 0x61,	//发送给b正在输入的状态	
+	IM_STATE_ADD_FRIEND			= 0x62,
+	IM_STATE_RE_ADD_FRIEND		= 0x63,
+	IM_STATE_RE_SERIAL			= 0x64,	// 确认及时消息,_iRet 对应的消息发送成功
+	IM_STATE_ERR_SERIAL			= 0x65,	// 消息发送失败，_iRet 对应的消息发送失败
+};
+
+additional -1表示失败。大于等于0成功，具体的值如下:
+// 发送信息的类型
+enum TImDataType
+{
+	IM_DATA_TYPE_ADDFRIEND		    = 0x21,		// 添加好友
+	IM_DATA_TYPE_RE_ADDFRIEND	    = 0x22,		// 回复添加好友
+	
+	IM_DATA_TYPE_GIFT_BE_GRAB		= 0x26,		// 零食被抢，成为好友
+	IM_DATA_TYPE_GIFT_DO_GRAB		= 0x27,		// 抢到别人的零食，成为好友
+
+	IM_DATA_TYPE_MSG_I_WANT			= 0x28,		// 千里眼消息
+	IM_DATA_TYPE_MSG_I_WANT_RE		= 0x29,		// 回复千里眼消息
+
+	IM_DATA_TYPE_DO_MINES		    = 0x31,		// 触雷
+	IM_DATA_TYPE_RE_MINES		    = 0x32,		// 自己放置的雷被触发
+	IM_DATA_TYPE_DO_FRIEND		    = 0x33,		// 触好友雷
+	IM_DATA_TYPE_RE_FRIEND		    = 0x34,		// 自己放置的好友雷被触发
+	IM_DATA_TYPE_FAILURE		    = 0x35,		// 猜错好友雷
+	IM_DATA_TYPE_RE_FAILURE		    = 0x36,		// 自己放置的好友雷猜错了
+	IM_DATA_TYPE_SET_FRIEND		    = 0x37,		// 你被放置了一颗好友雷
+	IM_DATA_TYPE_COUNT_FRIEND	    = 0x38,		// 好友雷结果的统计信息
+	IM_DATA_TYPE_RE_INVITATION	    = 0x39,		// 邀请反馈
+
+	IM_DATA_TYPE_MSG_CHECK_STATE    = 0x41,		//发送输入状态
+	IM_DATA_TYPE_ING_NOTICE		    = 0x42,		//Ing 离线通知
+	
+	IM_DATA_TYPE_TEXT 			    = 0x0, 		// 文字
+	IM_DATA_TYPE_JS 			    = 0x1, 		// js脚本
+	IM_DATA_TYPE_AMR			    = 0x2, 		// 声音
+	IM_DATA_TYPE_PICTURE		    = 0x3,		// 图片
+	IM_DATA_TYPE_TXT_AND_PIC	    = 0x4,		// 文字加表情
+	IM_DATA_TYPE_MP4        	    = 0x5,		// mp4视频
+
+	IM_DATA_TYPE_SYSTEM			    = 0xA,	
+	
+};
+
+ret 是函数im_c_AddFriend里面的第一个参数_iIndex
+*/
+
+
+
+//************************************
+// Method:    im_c_ReAddFriend
+// FullName:  im_c_ReAddFriend	回复好友添加
+// Access:    public 
+// Returns:   int	成功返回0，错误返回负值
+// Qualifier:
+// Parameter: int64_t _iIndex
+// Parameter: uint16_t _iArea	国际区号
+// Parameter: uint64_t _llUser	手机号
+// Parameter: uint32_t _iState	1同意 0拒绝
+//************************************
+int im_c_ReAddFriend(int64_t _iIndex, uint16_t _iArea, uint64_t _llUser, uint32_t _iState);
+//自己收到:
+//CallbackFun: IM_FUN_STATE						= 0xE4,		// 返回状态   
+//JsonString:{"additional":"34(-1失败，大于0是对应的_iDataType值之类的)","ret":"614473842294847920","state":"99"}
+//对方收到:
+//宏: IM_FUN_SEND_USER					= 0x35,		// 向用户发送消息,带主账号功能      
+//JsonString:{"additional":"0","data":"","data_len":"0","data_type":"34","dst_area":"86","dst_user":"13459259875","index":"614473842294847920","src_area":"86","src_user":"13459259876","time":"1447384229"}
+
+
+//************************************
+// Method:    im_c_DelFriend
+// FullName:  im_c_DelFriend	删除好友
+// Access:    public 
+// Returns:   int	返回0-255表示发送序号，发送成功，错误返回其他值
+// Qualifier:
+// Parameter: uint16_t _iArea	国际区号
+// Parameter: uint64_t _llUser	手机号
+//************************************
+int im_c_DelFriend(uint16_t _iArea, uint64_t _llUser);
+//自己收到:
+//CallbackFun: IM_FUN_DEL_FRIEND					= 0x23,		// 删除好友    
+//JsonString:{"fun":"35","ret":"0","serial":"2"}
+//对方收到:
+//CallbackFun: IM_FUN_HD_DEL_FRIEND				= 0x24,		// A删除或拉黑B,通知B更新好友列表    
+//JsonString:{"friend_count":"1","friend_list":[{"user_area":"86","user_id":"13459259875"}],"type":"3"}
+
+
+/** @brief    向其他用户发送数据
+  * @param[in]  _iIndex 从im_s_GetIndex() 返回的值
+  * @param[in]  _llSrcUser
+  * @param[in]  _llDstUser  目标用户Id
+  * @param[in]  _iDataType  数据类型
+  * @param[in]  _pcData     数据
+  * @param[in]  _iDataLen   数据长度
+  * @param[in]  _iAdditional    附加信息，对于阅后即焚，表示时间,对于声音，表示声音长度
+  * @return  返回0-255表示发送序号，发送成功，错误返回其他值
+  */
+int im_c_SendUser(int64_t _iIndex, uint16_t _iSrcArea, uint64_t _llSrcUser, uint16_t _iDstArea, uint64_t _llDstUser, int16_t _iDataType, char *_pcData, uint32_t _iDataLen, int16_t _iAdditional);
+//自己收到:
+//CallbackFun: IM_FUN_STATE						= 0xE4,		// 返回状态   
+//JsonString:{"additional":"0(-1失败，大于0是对应的_iDataType值之类的)","ret":"1414474647074207780","state":"100"}
+//对方收到:
+//CallbackFun: IM_FUN_SEND_USER					= 0x35,		// 向用户发送消息,带主账号功能        
+//JsonString:{"additional":"0","data":"73656E64206162636420746F20616E6F74686572206F6E65","data_len":"48","data_type":"0","dst_area":"86","dst_user":"13459259876","index":"1414474647074207780","src_area":"86","src_user":"13459259876","time":"1447464707"}
+
+
+
+// 反馈, 一般用来客户端提交bug
+int im_c_Feedback(char *_pcText);
+//宏:IM_FUN_FEEDBACK						= 0xE5,		// 反馈
+//JsonString:{"fun":"145","ret":"0","serial":"15"}
+
+
+
+//************************************
+// Method:    im_c_FollowUser	关注
+// FullName:  im_c_FollowUser
+// Access:    public 
+// Returns:   int	成功返回0,错误返回-1，已关注返回-2
+// Qualifier:
+// Parameter: uint16_t _iArea	国际区号
+// Parameter: uint64_t _llUser	手机号
+//************************************
+int im_c_FollowUser(uint16_t _iArea, uint64_t _llUser);
+//宏:FUN_FOLLOW_USER						=0xF6,		//关注
+//JsonString:{"fun":"145","ret":"0 成功，-1 失败， -5已经关注过了","serial":"15"}
+
+
+
+//************************************
+// Method:    im_c_UnFollowUser	取消关注
+// FullName:  im_c_UnFollowUser
+// Access:    public 
+// Returns:   int	成功返回0，否则返回-1
+// Qualifier:
+// Parameter: uint16_t _iArea	国际区号
+// Parameter: uint64_t _llUser	手机号
+//************************************
+int im_c_UnFollowUser(uint16_t _iArea, uint64_t _llUser);
+//宏:FUN_CANCEL_FOLLOW_USER				=0xF7,		//取消关注
+//JsonString:{"fun":"145","ret":"0 成功，-1 失败， -5已经取消关注过了/或者本来就关注","serial":"15"}
+
+
+
+//************************************
+// Method:    c_GetFansList
+// FullName:  c_GetFansList	获取粉丝列表
+// Access:    public 
+// Returns:   int	成功返回JSON，否则返回-1
+// Qualifier:
+// Parameter: uint16_t _iArea	国际区号
+// Parameter: uint64_t _llUser	手机号
+// Parameter: int32_t _nLastId	json中会返回一个id值，分页的时候，需要提交上次最后一个ID，第一页的时候是0
+//************************************
+int c_GetFansList(uint16_t _iArea, uint64_t _llUser,int32_t _nLastId);
+//宏: FUN_GET_FANS_LIST					=0xF8,		// 获取粉丝列表     
+//JsonString:
+//成功:{"area_code":"86","user_id":"13459259876","fans_count":"1","fans_list":[{"id":"1","area_code":"86","user_id":"13459259875","be_follow":"1","head_portrait":"/home/123.jpg","signature":"很有个性的修改签名","is_online":"1","sing_time":"1447725119","user_name":"momo"}],"previous_id":"0","ret":"0"}
+//失败:{"fun":"0xF8","ret":"-1","serial":"15"}
+
+
+
+//************************************
+// Method:    c_GetFollowList	
+// FullName:  c_GetFollowList	获取关注列表
+// Access:    public 
+// Returns:   int	成功返回JSON，否则返回-1
+// Qualifier:
+// Parameter: uint16_t _iArea	国际区号
+// Parameter: uint64_t _llUser	手机号
+// Parameter: int32_t _nLastId	json中会返回一个id值，分页的时候，需要提交上次最后一个ID，第一页的时候是0
+//************************************
+int c_GetFollowList(uint16_t _iArea, uint64_t _llUser,int32_t _nLastId);
+//宏: FUN_GET_FOLLOW_LIST					=0xF9,		// 获取粉关注表
+//JsonString:
+//成功:{"area_code":"86","follow_count":"2","follow_list":[{"area_code":"86","be_follow":"0","head_portrait":"","id":"2","is_online":"0","signature":"","sing_time":"0","user_id":"13459259877","user_name":""},{"area_code":"86","be_follow":"1","head_portrait":"","id":"1","is_online":"1","signature":"","sing_time":"1447725134","user_id":"13459259876","user_name":""}],"previous_id":"0","ret":"0","user_id":"13459259875"}
+//失败:{"fun":"0xF9","ret":"-1","serial":"15"}
+
+
+
+//************************************
+// Method:    c_SendIWant
+// FullName:  c_SendIWant	发送请求（鹰眼）
+// Access:    public 
+// Returns:   int
+// Qualifier:
+// Parameter: float _beginLongitude	开始经度
+// Parameter: float _beginLatitude	开始纬度
+// Parameter: float _endLongitude	结束经度
+// Parameter: float _endLatitude	结束纬度
+// Parameter: char * _pcAddrInfo	用户所在地址 
+// Parameter: char * _pcCountryInfo	用户所在国家 
+// Parameter: char * _pcMsg			请求内容	35汉字，70个字母 我的数组最大450
+// Parameter: int32_t _nLocalId		客户端需要的ID，服务器会直接返回
+//************************************
+int c_SendIWant(float _beginLongitude, float _beginLatitude,float _endLongitude, float _endLatitude,char* _pcAddrInfo,char* _pcCountryInfo,char* _pcMsg,int32_t _nLocalId);
+//自己收到:
+//CallbackFun: FUN_MSG_I_WANT						= 0x2A,		// 发送请求(鹰眼)   
+//JsonString:{"fun":"42","ret":"0","serial":"1"}
+//对方收到:
+//CallbackFun: IM_FUN_SEND_USER					= 0x35,		// 向用户发送消息,带主账号功能 
+//JsonString:{"additional":"0","data":"{"address":"AddressInfo","area_code":86,"begin_j":116.242304,"begin_w":39.632280,"country":"CountryInfo","end_j":116.442304,"end_w":39.832280,"head_portrait":"/home/nfs/data/1447376208/1447384153003.jpg","msg":"Msg Info","msg_id":9,"nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","phone_num":13459259875,"sex":1}\n","data_len":"312","data_type":"40","dst_area":"86","dst_user":"13459259877","index":"2114484366455936768","src_area":"86","src_user":"13459259875","time":"1448436645"}
+//可能会有离线通知
+
+
+
+//************************************
+// Method:    im_c_SendVideo
+// FullName:  im_c_SendVideo	发布视频
+// Access:    public 
+// Returns:   int
+// Qualifier:
+// Parameter: char * _pcVideoPath	视频路径
+// Parameter: float _J				经度
+// Parameter: float _W				纬度
+// Parameter: char * _pcAddrInfo	地理位置信息
+// Parameter: char * _pcMsg			用户填写的视频信息
+// Parameter: int64_t _nIWantMsgId	如果是回复别的用户的千里眼请求的话，这个需要填上千里眼的id
+// Parameter: int32_t _nLocalId		客户端需要的ID，服务器会直接返回
+//************************************
+int im_c_SendVideo(char* _pcVideoPath, float _J, float _W,char* _pcAddrInfo,char* _pcMsg,int64_t _nIWantMsgId,int32_t _nLocalId);
+//自己收到:
+//CallbackFun: IM_FUN_SEND_USER_VIDEO				= 0x28,		// 发布视频   
+//JsonString:{"fun":"40（没用）","ret":"123456789(-1出错，大于0的时候，为函数im_c_SendVideo中最后一个参数_nLocalId)","serial":"6（没用）"}
+//对方收到:
+//CallbackFun: IM_FUN_SEND_USER					= 0x35,		// 向用户发送消息,带主账号功能        
+//JsonString:{"additional":"0（没用）","data":"{"area_code":86,"head_portrait":"/home/nfs/data/1447376208/1447384153003.jpg","is_friend":1(两个人之前是不是好友，0不是，1是),"msg_id":4（千里眼表的ID）,"nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","phone_num":13459259877,"video_addr":"AddressInfo（用户发布视频所在地址）","video_latitude":39632280,"video_longitude":116242304,"video_msg":"Msg Info","video_path":"home/123.mp4"}\n","data_len":"311","data_type":"41","dst_area":"86","dst_user":"13459259875","index":"2014484370037749760","src_area":"86","src_user":"13459259877","time":"1448437003"}
+//可能会有离线通知
+
+
+
+//************************************
+// Method:    c_GetRangeUserNum
+// FullName:  c_GetRangeUserNum	获取范围内的用户数
+// Access:    public 
+// Returns:   int
+// Qualifier:
+// Parameter: float _beginLongitude	开始经度
+// Parameter: float _beginLatitude	开始纬度
+// Parameter: float _endLongitude	结束经度
+// Parameter: float _endLatitude	结束纬度
+//************************************
+int c_GetRangeUserNum(float _beginLongitude, float _beginLatitude,float _endLongitude, float _endLatitude);
+//宏:IM_FUN_RANGE_USER_NUM				= 0x1D,		// 获得区域内的用户数
+//JsonString:{"fun":"0x1D","ret":"0(-1 失败， 大于等于0表示该范围内用户数)","serial":"15"}
+
+
+
+//************************************
+// Method:    c_UpdateVideoLike
+// FullName:  c_UpdateVideoLike	视频点赞
+// Access:    public 
+// Returns:   int	成功返回0 ，否则返回-1
+// Qualifier:
+// Parameter: int64_t _llVideoId	视频id
+//************************************
+int c_UpdateVideoLike(int64_t _llVideoId);
+//宏:FUN_UPDATE_VIDEO_LIKE   			=0xF2,  	//视频点赞
+//JsonString:{"fun":"242","ret":"0(-1 失败， 0 没赞 1 赞)","serial":"15"}
+
+
+//************************************
+// Method:    c_UpdateVideoComment
+// FullName:  c_UpdateVideoComment	视频评论
+// Access:    public 
+// Returns:   int	成功返回0，否则返回-1
+// Qualifier:
+// Parameter: int64_t _llVideoId	视频id
+// Parameter: char * _pcComment		评论内容
+// Parameter: int _nLocalId			客户端需要的ID，服务器会直接返回
+//************************************
+int c_UpdateVideoComment(int64_t _llVideoId,char* _pcComment,int _nLocalId);
+//宏:FUN_UPDATE_VIDEO_COMMENT   			=0xF4, 		//视频评论
+//JsonString:{"fun":"244","ret":"0(-1 失败， 大于0的时候，为函数c_UpdateVideoComment中最后一个参数_nLocalId)","serial":"15"}
+
+
+
+//************************************
+// Method:    c_GetRangeVideoLst
+// FullName:  c_GetRangeVideoLst	获取范围内的视频列表
+// Access:    public 
+// Returns:   int
+// Qualifier:
+// Parameter: float _beginLongitude	开始经度
+// Parameter: float _beginLatitude	开始纬度
+// Parameter: float _endLongitude	结束经度
+// Parameter: float _endLatitude	结束纬度
+// Parameter: int32_t _nLastId	json中会返回一个id值，分页的时候，需要提交上次最后一个ID，第一页的时候是0
+//************************************
+int c_GetRangeVideoLst(float _beginLongitude, float _beginLatitude,float _endLongitude, float _endLatitude,int32_t _nLastId);
+//CallbackFun: IM_FUN_RANGE_VIDEO_LST				= 0x1E,		// 获得区域内的视频列表，有分页     
+//JsonString:{"previous_id":"0","ret":"0","video_list":[{"area_code":"86","head_portrait":"/home/nfs/data/1447376208/1447384153003.jpg","like_num":"0","nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","phone_num":"13459259877","reply_num":"0","signature":"很有个性的  个性签名","video_addr":"AddressInfo","video_id":"10","video_latitude":"39.6323","video_longitude":"116.2423","video_msg":"Msg Info","video_path":"home/123.mp4"},{"area_code":"86","head_portrait":"/home/nfs/data/1447376208/1447384153003.jpg","like_num":"0","nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","phone_num":"13459259878","reply_num":"0","signature":"很有个性的  个性签名","video_addr":"AddressInfo","video_id":"11","video_latitude":"39.6323","video_longitude":"116.2423","video_msg":"Msg Info","video_path":"home/123.mp4"},{"area_code":"86","head_portrait":"/home/nfs/data/1447666483/1447677843005.unknow","like_num":"0","nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","phone_num":"13366311912","reply_num":"0","signature":"这个家伙什么都没有留下","video_addr":"AddressInfo","video_id":"12","video_latitude":"39.6323","video_longitude":"116.2423","video_msg":"Msg Info","video_path":"home/123.mp4"},{"area_code":"86","head_portrait":"/home/nfs/data/1447666483/1447677843005.unknow","like_num":"0","nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","phone_num":"13366311913","reply_num":"0","signature":"这个家伙什么都没有留下","video_addr":"AddressInfo","video_id":"13","video_latitude":"39.6323","video_longitude":"116.2423","video_msg":"Msg Info","video_path":"home/123.mp4"},{"area_code":"86","head_portrait":"/home/nfs/data/1447666483/1447677843005.unknow","like_num":"0","nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","phone_num":"13366311914","reply_num":"0","signature":"这个家伙什么都没有留下","video_addr":"AddressInfo","video_id":"14","video_latitude":"39.6323","video_longitude":"116.2423","video_msg":"Msg Info","video_path":"home/123.mp4"},{"area_code":"86","head_portrait":"/home/nfs/data/1447666483/1447677843005.unknow","like_num":"0","nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","phone_num":"13366311915","reply_num":"0","signature":"这个家伙什么都没有留下","video_addr":"AddressInfo","video_id":"15","video_latitude":"39.6323","video_longitude":"116.2423","video_msg":"Msg Info","video_path":"home/123.mp4"},{"area_code":"86","head_portrait":"/home/nfs/data/1447666483/1447677843005.unknow","like_num":"0","nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","phone_num":"13366311916","reply_num":"0","signature":"这个家伙什么都没有留下","video_addr":"AddressInfo","video_id":"16","video_latitude":"39.6323","video_longitude":"116.2423","video_msg":"Msg Info","video_path":"home/123.mp4"},{"area_code":"86","head_portrait":"/home/nfs/data/1447666483/1447677843005.unknow","like_num":"0","nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","phone_num":"13366311917","reply_num":"0","signature":"这个家伙什么都没有留下","video_addr":"AddressInfo","video_id":"17","video_latitude":"39.6323","video_longitude":"116.2423","video_msg":"Msg Info","video_path":"home/123.mp4"},{"area_code":"86","head_portrait":"/home/nfs/data/1447666483/1447677843005.unknow","like_num":"0","nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","phone_num":"13366311918","reply_num":"0","signature":"这个家伙什么都没有留下","video_addr":"AddressInfo","video_id":"18","video_latitude":"39.6323","video_longitude":"116.2423","video_msg":"Msg Info","video_path":"home/123.mp4"},{"area_code":"86","head_portrait":"/home/nfs/data/1447666483/1447677843005.unknow","like_num":"0","nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","phone_num":"13366311919","reply_num":"0","signature":"这个家伙什么都没有留下","video_addr":"AddressInfo","video_id":"19","video_latitude":"39.6323","video_longitude":"116.2423","video_msg":"Msg Info","video_path":"home/123.mp4"}]}
+
+
+
+
+//************************************
+// Method:    im_c_GetUserInfoCount
+// FullName:  im_c_GetUserInfoCount	用户信息中的，视频数量，好友、关注、粉丝的总数及新增数
+// Access:    public 
+// Returns:   int
+// Qualifier:
+//************************************
+int im_c_GetUserInfoCount();
+//CallbackFun: FUN_GET_USER_INFO_COUNT				= 0x20,		//用户信息中的，视频数量，好友、关注、粉丝的总数及新增数     
+//JsonString:{"area_code":"86","fans_num":"1","fans_num_new":"1","follow_num":"3","follow_num_new":"3","friend_num":"2","friend_num_new":"2","ret":"0","user_id":"13459259875","video_num":"3"}
+
+
+
+
+
+//************************************
+// Method:    im_c_GetMyFriends
+// FullName:  im_c_GetMyFriends	获取我的好友列表
+// Access:    public 
+// Returns:   int
+// Qualifier:
+// Parameter: int32_t _nLastId	json中会返回一个id值，分页的时候，需要提交上次最后一个ID，第一页的时候是0
+//************************************
+int im_c_GetMyFriends(int32_t _nLastId);
+//CallbackFun: IM_FUN_MY_FRIENDS					= 0x60,		// 获取好友列表     
+//JsonString:{"area_code":"86","friend_list":[{"area_code":"86","friend_id":"4","head_portrait":"/home/nfs/data/1447376208/1447384153003.jpg","user_id":"13459259875","user_name":"e68891e79a84e5a5bde4bda0e4b88de68782"},{"area_code":"86","friend_id":"2","head_portrait":"/home/nfs/data/1447376208/1447384153003.jpg","user_id":"13459259875","user_name":"e68891e79a84e5a5bde4bda0e4b88de68782"}],"previous_id":"0","ret":"0","user_id":"13459259875"}
+
+
+
+
+//************************************
+// Method:    im_c_GetVideoLst
+// FullName:  im_c_GetVideoLst	分页获取某人的视频列表
+// Access:    public 
+// Returns:   int
+// Qualifier:
+// Parameter: uint16_t _iArea	国际区号
+// Parameter: uint64_t _llUser	手机号
+// Parameter: int64_t _nLastId	json中会返回一个id值，分页的时候，需要提交上次最后一个ID，第一页的时候是0
+//************************************
+int im_c_GetVideoLst(uint16_t _iArea, uint64_t _llUser,int64_t _nLastId);
+//CallbackFun: IM_FUN_USER_VIDEO_LST				= 0x1F,		// 获得某个用户的视频列表，有分页     
+//JsonString:{"area_code":"86","head_portrait":"/home/nfs/data/1447376208/1447384153003.jpg","nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","previous_id":"0","ret":"0","user_id":"13459259876","video_list":[{"create_time":"1447901155","like_num":"0","reply_list":[],"reply_num":"0","video_addr":"AddressInfo","video_id":"8","video_latitude":"39.6323","video_longitude":"116.2423","video_msg":"Msg Info","video_path":"home/123.mp4"},{"create_time":"1447900866","like_num":"0","reply_list":[],"reply_num":"0","video_addr":"AddressInfo","video_id":"7","video_latitude":"39.6323","video_longitude":"116.2423","video_msg":"Msg Info","video_path":"home/123.mp4"},{"create_time":"1447900815","like_num":"1","reply_list":[{"area_code":"2147483647","nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","reply_content":"reply video lalala 3","user_id":"86"},{"area_code":"2147483647","nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","reply_content":"reply video lalala 4","user_id":"86"},{"area_code":"2147483647","nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","reply_content":"reply video lalala 5","user_id":"86"}],"reply_num":"6","video_addr":"AddressInfo","video_id":"6","video_latitude":"39.6323","video_longitude":"116.2423","video_msg":"Msg Info","video_path":"home/123.mp4"},{"create_time":"1447900791","like_num":"0","reply_list":[],"reply_num":"0","video_addr":"AddressInfo","video_id":"5","video_latitude":"39.6323","video_longitude":"116.2423","video_msg":"Msg Info","video_path":"home/123.mp4"},{"create_time":"1447900301","like_num":"0","reply_list":[],"reply_num":"0","video_addr":"AddressInfo","video_id":"4","video_latitude":"39.6323","video_longitude":"116.2423","video_msg":"","video_path":"home/123.mp4"},{"create_time":"1447900106","like_num":"0","reply_list":[],"reply_num":"0","video_addr":"AddressInfo","video_id":"3","video_latitude":"39.6323","video_longitude":"116.2423","video_msg":"P","video_path":"home/123.mp4"}]}
+/*
+{
+	"user_id" : "13459259876",
+	"area_code" : "86",
+	"nick_name" : "e68891e79a84e5a5bde4bda0e4b88de68782",
+	"head_portrait" : "/home/nfs/data/1447376208/1447384153003.jpg",
+	"signature" : "很有个性的  个性签名",
+	"video_num" : "6",
+	"follow_num" : "1",
+	"friend_num" : "1",
+	"fans_num" : "2",
+	"is_follow" : "1",
+	"video_list" : [{
+			"video_id" : "8",
+			"video_path" : "home/123.mp4",
+			"video_addr" : "AddressInfo",
+			"video_longitude" : "116.2423",
+			"video_latitude" : "39.6323",
+			"video_msg" : "Msg Info",
+			"create_time" : "1447901155",
+			"i_like" : "0",
+			"like_num" : "0",
+			"reply_num" : "0",
+			"click_num" : "0",
+			"share_num" : "0",
+			"reply_list" : []
+		}, {
+			"video_id" : "7",
+			"video_path" : "home/123.mp4",
+			"video_addr" : "AddressInfo",
+			"video_longitude" : "116.2423",
+			"video_latitude" : "39.6323",
+			"video_msg" : "Msg Info",
+			"create_time" : "1447900866",
+			"i_like" : "0",
+			"like_num" : "0",
+			"reply_num" : "0",
+			"click_num" : "1",
+			"share_num" : "1",
+			"reply_list" : []
+		}, {
+			"video_id" : "6",
+			"video_path" : "home/123.mp4",
+			"video_addr" : "AddressInfo",
+			"video_longitude" : "116.2423",
+			"video_latitude" : "39.6323",
+			"video_msg" : "Msg Info",
+			"create_time" : "1447900815",
+			"i_like" : "1",
+			"like_num" : "1",
+			"reply_num" : "6",
+			"click_num" : "2",
+			"share_num" : "3",
+			"reply_list" : [{
+					"area_code" : "86",
+					"user_id" : "13459259875",
+					"nick_name" : "e68891e79a84e5a5bde4bda0e4b88de68782",
+					"reply_content" : "reply video lalala 3"
+				}, {
+					"area_code" : "86",
+					"user_id" : "13459259875",
+					"nick_name" : "e68891e79a84e5a5bde4bda0e4b88de68782",
+					"reply_content" : "reply video lalala 4"
+				}, {
+					"area_code" : "86",
+					"user_id" : "13459259875",
+					"nick_name" : "e68891e79a84e5a5bde4bda0e4b88de68782",
+					"reply_content" : "reply video lalala 5"
+				}
+			]
+		}, {
+			"video_id" : "5",
+			"video_path" : "home/123.mp4",
+			"video_addr" : "AddressInfo",
+			"video_longitude" : "116.2423",
+			"video_latitude" : "39.6323",
+			"video_msg" : "Msg Info",
+			"create_time" : "1447900791",
+			"i_like" : "0",
+			"like_num" : "0",
+			"reply_num" : "0",
+			"click_num" : "0",
+			"share_num" : "0",
+			"reply_list" : []
+		}, {
+			"video_id" : "4",
+			"video_path" : "home/123.mp4",
+			"video_addr" : "AddressInfo",
+			"video_longitude" : "116.2423",
+			"video_latitude" : "39.6323",
+			"video_msg" : "",
+			"create_time" : "1447900301",
+			"i_like" : "0",
+			"like_num" : "0",
+			"reply_num" : "0",
+			"click_num" : "0",
+			"share_num" : "0",
+			"reply_list" : []
+		}, {
+			"video_id" : "3",
+			"video_path" : "home/123.mp4",
+			"video_addr" : "AddressInfo",
+			"video_longitude" : "116.2423",
+			"video_latitude" : "39.6323",
+			"video_msg" : "P",
+			"create_time" : "1447900106",
+			"i_like" : "0",
+			"like_num" : "0",
+			"reply_num" : "0",
+			"click_num" : "0",
+			"share_num" : "0",
+			"reply_list" : []
+		}
+	],
+	"previous_id" : "0"
+}
+*/
+
+
+/** @brief    设置当前程序是否后台运行中
+  * @param[in]  _iBackground 0 非后台，1后台
+  */
+void c_SetBackground(int _iBackground);
+//没返回
+
+
+/** @brief    删除视频
+  * @param[in]  _llVideoId  视频id
+  */
+int im_c_DelUserVideo(int64_t _llVideoId);
+//宏:IM_FUN_DEL_USER_VIDEO				= 0x2B,		// 删除视频
+//JsonString:{"fun":"43","ret":"0(-1 失败， 0 成功)","serial":"15"}
+
+
+/** @brief    点击浏览视频
+  * @param[in]  _llVideoId  视频id
+  */
+int im_c_ClickUserVideo(int64_t  _llVideoId);
+//宏:IM_FUN_CLICK_USER_VIDEO				= 0x29,		// 点击视频
+//JsonString:{"fun":"41","ret":"0(-1 失败， 0 成功)","serial":"15"}
+
+/** @brief    分享一次视频
+  * @param[in]  _llVideoId  视频id
+  */
+int im_c_ShareUserVideo(int64_t  _llVideoId);
+//宏:IM_FUN_SHARE_USER_VIDEO				= 0x2C,		// 分享视频
+//JsonString:{"fun":"44","ret":"0(-1 失败， 0 成功)","serial":"15"}
+
+
+
+
+
+//************************************
+// Method:    im_c_UpdatePushCounter
+// FullName:  im_c_UpdatePushCounter	设置推送时的数值
+// Access:    public 
+// Returns:   int
+// Qualifier:
+// Parameter: int32_t _nCounter	推送显示的起始数据，不能小于0
+//************************************
+int im_c_UpdatePushCounter(int32_t _nCounter);
+//宏:IM_FUN_UPDATE_PUSH_COUNTER			= 0x45,		// 更新推送时的数字
+//JsonString:{"fun":"69","ret":"0(-1 失败， 0 成功)","serial":"4"}
+
+
+
+
+//************************************
+// Method:    im_c_AddFriend_Force
+// FullName:  im_c_AddFriend_Force	强制添加好友
+// Access:    public 
+// Returns:   int	成功返回0，错误返回负值
+// Qualifier:
+// Parameter: uint16_t _iArea 国际区号
+// Parameter: uint64_t _llUser	手机号
+//************************************
+int im_c_AddFriend_Force(uint16_t _iArea, uint64_t _llUser);
+//宏:IM_FUN_ADD_FRIEND					= 0x21,		// 添加好友(现在单方添加就行)
+//JsonString:{"bAdd":"0(0 添加， 1被添加)","ret":"0(0成功，-1失败)","user_area":"86","user_id":"13459259878" //后面两个是对方的信息}
+
+
+
+
+
+//************************************
+// Method:    im_c_AddContact
+// FullName:  im_c_AddContact	上传通讯录
+// Access:    public 
+// Returns:   int
+// Qualifier:
+// Parameter: char * _pcPhoneList	手机号列表，多个手机号用*隔开,需要带上国际区号
+//************************************
+int im_c_AddContact(char *_pcPhoneList);
+
+//成功:
+//宏: IM_FUN_RE_CONTACT_ADD				= 0x56,		// 回复上传通讯录     
+//JsonString:{"list":[{"style":"1(0该用户未被邀请过,1该用户已经注册过,2该用户被邀请过,3之前删除过的好友，不再添加)","user_id":"8613459259876"},{"style":"1","user_id":"8613459259877"},{"style":"1","user_id":"8613459259878"},{"style":"1","user_id":"8613459259879"},{"style":"1","user_id":"8613459259880"},{"style":"0","user_id":"8613459259870"},{"style":"1","user_id":"8613366311912"}],"ret":"0"}
+//如果有添加好友，双方都会收到好友列表通知
+//宏: IM_FUN_FRIEND_LIST					= 0x61,		// 获取好友列表    JsonString:{"friend_count":"6","friend_list":[{"user_area":"86","user_id":"13459259877"},{"user_area":"86","user_id":"13459259876"},{"user_area":"86","user_id":"13459259878"},{"user_area":"86","user_id":"13459259879"},{"user_area":"86","user_id":"13459259880"},{"user_area":"86","user_id":"13366311912"}],"type":"1"}
+//失败:
+//宏: IM_FUN_RE_CONTACT_ADD				= 0x56,		// 回复上传通讯录     
+//JsonString:{"ret":"-1"}
+//或:
+//宏:IM_FUN_CONTACT_ADD					= 0x55,		// 上传通讯录
+//JsonString:{"fun":"0x55","ret":"-1","serial":"4"}
+
+
+
+
+
+/** @brief    新建群
+  * @param[in]  GroupName    群名称,十六进制字符串
+  * @param[in]  _pcTag   	 群说明,十六进制字符串
+  * @param[in]  _pcUserID    用户列表，可以多个，逗号分隔，需要加区号 ：8613459259875,8613459259876,8613459259877
+  * @retrun 	正常返回群号，错误返回-1
+  */
+int  im_c_CreateGroup(char *_pcGroupName,char *_pcTag,char *_pcUserID);
+//宏: IM_FUN_CREATE_GROUP					= 0x12,		// 新建群     
+//JsonString:{"fun":"18","ret":"1","serial":"3"}
+
+
+
+
+/** @brief    添加群组成员
+  * @param[in]  	_nGroupid    群id号
+  * @param[in]	_llUserID	    用户列表，可以多个，逗号分隔，需要加区号 ：8613459259875,8613459259876,8613459259877
+  * @retrun   正常返回0，错误返回-1
+  */
+int im_c_Add_GroupMembers(uint64_t _llGroupid,char *_pcUserID);
+//宏: IM_FUN_ADD_GROUP_MEMBERS			= 0x15,		// 添加群组成员    
+//JsonString:{"fun":"21","ret":"0","serial":"3"}
+
+
+
+
+/** @brief    获取群组成员列表
+  * @param[in]  _nGroupid   群id
+  * @param[in]  _nLastId    最后一条记录的ID
+  * @retrun   正常返回JSON，错误返回-1
+  */
+int im_c_Get_GroupMember_List(uint64_t _llGroupid,uint64_t _llLastId);
+//宏: IM_FUN_GET_GROUPMEMBER_LIST 		= 0x16,		// 获取群组成员列表
+//成功:
+//JsonString:{"User_list":[{"area_code":"86","id":"1","sex":"1","user_id":"13459259875","user_name":"e68891e79a84e5a5bde4bda0e4b88de68782"},{"area_code":"86","id":"2","sex":"0","user_id":"13459259876","user_name":"e68891e79a84e5a5bde4bda0e4b88de68782"},{"area_code":"86","id":"3","sex":"0","user_id":"13459259877","user_name":"e68891e79a84e5a5bde4bda0e4b88de68782"},{"area_code":"86","id":"4","sex":"0","user_id":"13459259878","user_name":"e68891e79a84e5a5bde4bda0e4b88de68782"},{"area_code":"86","id":"5","sex":"0","user_id":"13459259879","user_name":"e68891e79a84e5a5bde4bda0e4b88de68782"},{"area_code":"86","id":"6","sex":"0","user_id":"13459259880","user_name":"e68891e79a84e5a5bde4bda0e4b88de68782"}],"ret":"0"}
+//失败::
+//JsonString:{"fun":"22","ret":"-1","serial":"1"}
+	
+
+
+/** @brief    发送群消息
+  * @param[in]  _iIndex 从im_c_GetIndexLongLong() 返回的值
+  * @param[in]  _iSrcArea	发送手机区号
+  * @param[in]  _llSrcUser	发送者手机号
+  * @param[in]  _llGroupid  群组Id
+  * @param[in]  _iDataType  数据类型
+  * @param[in]  _pcData     数据
+  * @param[in]  _iDataLen   数据长度
+  * @param[in]  _iAdditional    附加信息，对于阅后即焚，表示时间,对于声音，表示声音长度
+  * @return  返回0-255表示发送序号，发送成功，错误返回其他值
+  */
+int im_c_SendGroupMsg(int64_t  _iIndex, uint16_t _iSrcArea, uint64_t _llSrcUser, uint64_t _llGroupid, int16_t _iDataType, char *_pcData, uint32_t _iDataLen, int16_t _iAdditional);
+//自己收到：
+//宏: IM_FUN_STATE						= 0xE4,		// 返回状态    
+//JsonString:{"additional":"3","ret":"5514533561690296320","state":"100"}
+//其它人收到：
+//宏: IM_FUN_SEND_GROUP_MESSAGE			= 0x17,		// 发送群消息
+//JsonString:{"additional":"5","data":"2F686F6D652F6E66732F646174612F313433393138353335372F313433393139313534353030392E6A7067","data_len":"86","data_type":"3","group_id":"1","index":"-1635446784","src_area":"86","src_user":"13459259875","time":"1453356169"}
+
+
+
+
+
+/** @brief    成员退群
+  * @param[in]  _llGroupid  群组Id
+  * @retrun   正常返回0，错误返回-1
+  */
+int im_c_Exit_Group(uint64_t _llGroupid);
+//宏: IM_FUN_EXIT_GROUP					= 0x18,		// 成员退群     
+//JsonString:{"fun":"24","ret":"0(-1出错，-4 群不存在，-3 不是该群成员，0 退出成功)","serial":"4"}
+
+
+
+
+/** @brief	  获取我的群列表
+  * @retrun   正常返回JSON，错误返回-1
+  */
+int im_c_Get_MyGroup_List();
+//宏: IM_FUN_GET_MYGROUP_LIST				= 0x1A,		// 获取我的群列表
+//JsonString:{"group_count":"1","group_list":[{"create_time":"1453345390","group_id":"1","group_name":"E7BEA4E6B58BE8AF9543"}],"ret":"0","user_id":"8613459259875"}
+//极端出错情况，可以不用管
+//JsonString:{"fun":"0x1A","ret":"-1","serial":"1"}
+
+
+
+
+
+/** @brief    群主删除某人
+  * @param[in]  _llGroupid  群组Id
+  * @param[in]  _iArea	发送手机区号
+  * @param[in]  _llUserId   被删除的用户ID
+  * @retrun   正常返回0，错误返回-1,操作者不是群创建者返回-3,被删除者不在该群返回-4
+  */
+int im_c_DelGroupMember(uint64_t _llGroupid, uint16_t _iArea,uint64_t _llUserId);
+//自己收到 
+//宏: IM_FUN_DEL_GROUP_MEMBER				= 0xB,		// 群主删除某人
+//JsonString:{"fun":"11","ret":"0(0成功，-1出错，-5 不能删除自己，-3 不存在群或者非群主，-4 不存在该成员)","serial":"3"}
+//对方收到
+//宏: IM_FUN_SEND_GROUP_MESSAGE			= 0x17,		// 发送群消息     
+//JsonString:{"additional":"0","data":"","data_len":"0","data_type":"28","group_id":"1","index":"981048528","src_area":"86","src_user":"13459259877","time":"1453361911"}
+
+
+
+
+
+/** @brief    删除群
+  * @param[in]  _nGroupid    群id
+  * @retrun   正常返回0，错误返回-1，该群不存在返回-3,不是群创建者返回-4
+  */
+int im_c_Delete_Group(uint64_t _llGroupid);
+//宏: IM_FUN_DELETE_GROUP					= 0x13,		// 删除群
+//JsonString:{"fun":"19","ret":"-3(0成功，-1出错，-3非群主或不存在该群号)","serial":"13"}
+
+
+
+//************************************
+// Method:    im_c_DriverQuotedPrice
+// FullName:  im_c_DriverQuotedPrice	司机报价接口
+// Access:    public 
+// Returns:   int
+// Qualifier:
+// Parameter: char * _pcProvince	省份名称，最长50个字符
+// Parameter: char * _pcCity	市名称，最长50个字符
+// Parameter: char * _pcRegion	区名称，最长50个字符
+// Parameter: uint32_t _iPrice	报价，正整形，个位是分，十位是角，百位是元，就是乘以100了
+//************************************
+int  im_c_DriverQuotedPrice(char *_pcProvince,char *_pcCity,char *_pcRegion,uint32_t _iPrice);
+//宏: IM_FUN_DRIVER_QUOTE_PRICE			= 0x63,		// 司机报价
+//JsonString:{"fun":"99","ret":"0","serial":"1"}
+
+
+
+//************************************
+// Method:    im_c_DelQuotedPrice
+// FullName:  im_c_DelQuotedPrice	删除报价
+// Access:    public 
+// Returns:   int
+// Qualifier:
+// Parameter: uint64_t _idQuotedPrice	报价表中的ID
+//************************************
+int  im_c_DelQuotedPrice(uint64_t _idQuotedPrice);
+//宏: IM_FUN_DEL_QUOTE_PRICE				= 0x64,		// 删除报价
+//JsonString:{"fun":"100","ret":"0","serial":"2"}
+
+
+
+
+
+
+//************************************
+// Method:    im_c_GetUsrDFCInfo
+// FullName:  im_c_GetUsrDFCInfo	获取大丰车相关的用户信息，现在有，位置，坐标，报价（司机才有）
+// Access:    public 
+// Returns:   int
+// Qualifier:
+// Parameter: uint16_t _iArea	区号
+// Parameter: uint64_t _llUser	手机号
+//************************************
+int im_c_GetUsrDFCInfo(uint16_t _iArea, uint64_t _llUser);
+//宏: IM_FUN_DFC_USER_INFO				= 0x65,		// 获取大丰车相关的用户信息
+//JsonString:{"area_code":"86","birthday":"1985-12-12","city":"阳江市","country":"中国","head_portrait":"/home/123.jpg","identity":"2","latitude":"39.73228","longitude":"116.342304","nick_name":"momo","phone_num":"13459259875","postion_update_time":"1457181811","provice":"广东省","quoted_price_list":[{"city":"阳江市","price_id":"3","provinc":"广东省","quoted_price":"1500","region":"阳西县","update_time":"1457184102"}],"region":"阳西县","remaining_addr":"2区XXXXXXXXXX","ret":"0","sex":"1","signature":"很有个性的修改签名"}
+//极端出错情况，可以不用管
+//JsonString:{"fun":"0x65","ret":"-1","serial":"1"}
+
+
+
+//************************************
+// Method:    im_c_UpdateUserInfo
+// FullName:  im_c_UpdateUserInfo  更新大丰车用户信息
+// Access:    public 
+// Returns:   int
+  * @param[in]  _iType  用户资料类型，详细请查看TImUserInfoType  
+  * @param[in]  _pcData 个人资料具体内容
+  */
+int im_c_UpdateUserInfo(int32_t _iType, char *_pcData);
+//宏: IM_FUN_UPDATE_INFO				= 0x7		// 更新大丰车用户地址信息和联系方式
+// show_flag  0 不显示  1显示
+// "{\"country\":\"中国\",\"province\":\"广东省\",\"city\":\"阳江市\",\"region\":\"阳西县\",\"remaining_addr\":\"2区XXXXXXXXXX\",\"longitude\":\"116.342304\",\"latitude\":\"39.732280\", \"phone\":\"15863425454\",\"show_flag\":\"1\"}"
+
+
+
+/** @brief   获取大丰车当前矩形内的所有司机列表
+  * @return  INT
+  *  _iX1  经度开始位置
+  *  _iX2  经度结束位置
+  *  _iY1  维度开始位置
+  *  _iY2  维度结束位置
+  * _iPageNum  页码，从1开始
+  * _iPageSize   返回数
+  *  phone_show_flag   0 不显示  1 显示
+  */
+  //宏: IM_FUN_DFC_QUERY_DRIVERS				= 0x66		// 获取大丰车当前矩形内的所有司机列表
+int im_c_GetDriversByDriver(float _iX1, float _iX2, float _iY1, float _iY2, int _iPageNum,  int _iPageSize);
+
+返回json字符串：
+{"dfc_range_drivers":[{"area_code":"86","phone_num":"13366311912","nick_name":"momo","head_portrait":"/home/nfs/telegram/data/1459160128/1459160128000.jpg","signature":"","sex":"1","identity":"1","birthday":"19851212000000","country":"中国","province":"香港","city":"香港","remaining_addr":"维多利亚大道","phone":"13366311912","phone_show_flag":"0","location_j":"116.3154","location_w":"116.3154", "quoted_price_list":[,{"price_id":"180","province":"上海市","city":"上海市","region":"长宁区","quoted_price":"5","update_time":"1459160236"},{"price_id":"179","province":"上海市","city":"上海市","region":"浦东新区","quoted_price":"0","update_time":"1459160226"}]}],"has_more":"0", "cur_idx":"0"}
+
+// has_more  1, 还可以查询 0， 已到结尾
+// cur_idx  返回当前查询的开始记录位置，再次调用时需cur_idx+_iPageSize得到新的开始位置
+
+
+
+int im_c_GetDriversByDriver(float _iX1, float _iX2, float _iY1, float _iY2, int _iPageNum, int _iPageSize);
+
+/** @brief   根据指定条件获取大丰车用户列表
+  * @return	
+  * @_iGetAllCityFlag   0： 获取所有，没有地址限制，不需输入省份和城市信息， 1： 获取指定地址，需输入省份和城市信息
+  * @_iSexFlag  -1：所有性别， 0： 保密， 1： 男， 2：女
+  * @_iIdentity  1：农民， 2：司机，3：公共账号  //当选择2时，需要输入价格起点和价格终点
+  * @_pcProvince  省份信息
+  * @_pcCity     城市信息
+  * @_iPriceStart  价格起点
+  * @_iPriceEnd   价格终点
+  * @ _iCurIdx   记录开始位置
+  * @ _iPageSize  获取记录条数
+  */
+int im_c_DfcQueryUsersByLocation(int _iGetAllCityFlag, int _iSexFlag, int _iIdentity, char* _pcProvince = NULL, char* _pcCity = NULL, int _iPriceStart = 0, int _iPriceEnd = 0, int _iCurIdx=0, int _iPageSize=100);
+
+
+返回字符串：
+{"user_list":[{"area_code":"86","phone_num":"15038112593","nick_name":"","head_portrait":"","signature":"","sex":"0","birthday":"0","country":"中国","province":"黑龙江","city":"齐齐哈尔","remaining_addr":"胡说八道","phone":"15038112592","phone_show_flag":"1","location_j":"116.3877","location_w":"116.3877", "quoted_price_list":[{"price_id":"174","province":"黑龙江","city":"齐齐哈尔","region":"胡说八道","quoted_price":"35","update_time":"1459157653"}]},{"area_code":"86","phone_num":"18206192830","nick_name":"","head_portrait":"","signature":"","sex":"0","birthday":"0","country":"中国","province":"湖南","city":"岳阳","remaining_addr":"山区","phone":"18206192830","phone_show_flag":"1","location_j":"116.3680","location_w":"116.3680", "quoted_price_list":[{"price_id":"175","province":"湖南","city":"岳阳","region":"不知道","quoted_price":"20","update_time":"1459157706"}]},{"area_code":"86","phone_num":"15651573735","nick_name":"E58D97E9A38EE59CB0E696B9","head_portrait":"/home/nfs/telegram/data/1458806228/1458883661022.jpg","signature":"我是开发者啊","sex":"1","birthday":"711216000","country":"中国","province":"福建省","city":"福州市","remaining_addr":"苏州独墅湖B1900","phone":"18206192830","phone_show_flag":"0","location_j":"120.7249","location_w":"120.7249", "quoted_price_list":[{"price_id":"167","province":"安徽省","city":"池州市","region":"东至县","quoted_price":"99","update_time":"1459146252"},{"price_id":"168","province":"安徽省","city":"滁州市","region":"定远县","quoted_price":"99","update_time":"1459146349"},{"price_id":"170","province":"安徽省","city":"安庆市","region":"枞阳县","quoted_price":"99","update_time":"1459146907"},{"price_id":"171","province":"广西壮族自治区","city":"百色市","region":"德保县","quoted_price":"99","update_time":"1459146950"},{"price_id":"172","province":"海南省","city":"三亚市","region":"白沙黎族自治县","quoted_price":"99","update_time":"1459147062"}]},{"area_code":"86","phone_num":"13459259875","nick_name":"momo","head_portrait":"/home/123.jpg","signature":"很有个性的修改签名","sex":"1","birthday":"503164800","country":"中国","province":"广东省","city":"阳江市","remaining_addr":"2区XXXXXXXXXX","phone":"13459259875","phone_show_flag":"0","location_j":"116.3423","location_w":"116.3423", "quoted_price_list":[{"price_id":"3","province":"广东省","city":"阳江市","region":"阳西县","quoted_price":"1500","update_time":"1457252096"}]},{"area_code":"86","phone_num":"13459259876","nick_name":"e68891e79a84e5a5bde4bda0e4b88de68782","head_portrait":"/home/nfs/data/1447376208/1447384153003.jpg","signature":"很有个性的  个性签名","sex":"0","birthday":"609951600","country":"中国","province":"辽宁","city":"沈阳","remaining_addr":"第二街道","phone":"13459259876","phone_show_flag":"1","location_j":"116.3423","location_w":"116.3423", "quoted_price_list":[{"price_id":"173","province":"辽宁","city":"沈阳","region":"大东","quoted_price":"30","update_time":"1459157571"}]}],"has_more":"1", "cur_idx":"0"}
+// 如果identity=2,返回json字符串中有quoted_price_list属性
+// has_more  1, 还可以查询 0， 已到结尾
+// cur_idx  返回当前查询的开始记录位置，再次调用时需cur_idx+_iPageSize得到新的开始位置
+
