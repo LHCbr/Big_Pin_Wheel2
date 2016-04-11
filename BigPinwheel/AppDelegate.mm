@@ -32,19 +32,45 @@
         [userDefaults synchronize];
     }
     
-    
     [WSocket sharedWSocket];
-
+    
+    NSDictionary *attributeDict = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor grayColor],NSForegroundColorAttributeName,[UIFont fontWithName:@"Helvetica" size:11] ,NSFontAttributeName, nil];
+    NSDictionary *selectAttriDict = [NSDictionary dictionaryWithObjectsAndKeys:kThemeColor,NSForegroundColorAttributeName,[UIFont fontWithName:@"Helvetica" size:11],NSFontAttributeName, nil];
+    
+    _homePageVC = [[HomePageViewController alloc]init];
+    UITabBarItem *tabarItem1 = [[UITabBarItem alloc]initWithTitle:@"首页" image:nil selectedImage:nil];
+    UINavigationController *nav1 = [[UINavigationController alloc]initWithRootViewController:_homePageVC];
+    
+    _messageVC = [[HomeViewController alloc]init];
+    UITabBarItem *tabarItem2 = [[UITabBarItem alloc]initWithTitle:@"消息" image:nil selectedImage:nil];
+    UINavigationController *nav2 = [[UINavigationController alloc]initWithRootViewController:_messageVC];
+    
+    _mineVC = [[MineViewController alloc]init];
+    UITabBarItem *tabarItem3 = [[UITabBarItem alloc]initWithTitle:@"我的" image:nil selectedImage:nil];
+    UINavigationController *nav3 = [[UINavigationController alloc]initWithRootViewController:_mineVC];
+    
+    nav1.tabBarItem = tabarItem1;
+    nav2.tabBarItem = tabarItem2;
+    nav3.tabBarItem = tabarItem3;
+    
+    nav1.navigationBarHidden = YES;
+    nav3.navigationBarHidden = YES;
+    
+    [[UITabBarItem appearance]setTitleTextAttributes:attributeDict forState:UIControlStateNormal];
+    [[UITabBarItem appearance]setTitleTextAttributes:selectAttriDict forState:UIControlStateSelected];
+    
+    
+    _tabarC = [[UITabBarController alloc]init];
+    _tabarC.tabBar.barTintColor = [UIColor whiteColor];
+    _tabarC.tabBar.itemPositioning = UITabBarItemPositioningAutomatic;
+    _tabarC.selectedIndex = 0;
+    _tabarC.viewControllers = @[nav1,nav2,nav3];
     
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    self.window.rootViewController = _tabarC;
     self.window.backgroundColor = kBGColor;
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
     
-    _rootVC = [[RootViewController alloc]init];
-    UINavigationController *rootNav = [[UINavigationController alloc]initWithRootViewController:_rootVC];
-    rootNav.navigationBar.tintColor = [UIColor blackColor];
-    rootNav.navigationBar.barTintColor = kThemeColor;
-    self.window.rootViewController = rootNav;
     [self.window makeKeyAndVisible];
     
     return YES;

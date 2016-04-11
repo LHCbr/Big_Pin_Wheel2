@@ -61,26 +61,28 @@
         
         int select = [[noti object]intValue];
         if (select ==1) {
-            self.navigationItem.title = @"正在聊天";
+            self.navigationController.title = @"消息";
         }
         else
         {
-            self.navigationItem.title = @"连接中";
+            self.navigationItem.title = @"消息(未连接)";
         }
         
     });
 }
 
-///登陆成功 获取最新的最近聊天列表
+/*登陆成功 获取最新的最近聊天列表*/
 -(void)loginSuccess:(NSNotification *)noti
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        
+        MBProgressHUD *hud = [self creatNavBarMBPHud];
         if (_wSocket.nearMessageList.count <=0) {
+            self.navigationItem.title = @"接受中...";
             _wSocket.nearMessageList = [[NSMutableArray alloc]initWithArray:[_wSocket.lbxManager getAllMessage]];
             [_tableView reloadData];
         }
-        
+        self.navigationItem.title = @"消息";
+        [hud hide:YES afterDelay:0.5];
     });
 }
 
@@ -103,7 +105,7 @@
     {
         if (object.noReadCount >0)
         {
-            count =object.noReadCount;
+            count += object.noReadCount;
         }
     }
     
@@ -112,17 +114,18 @@
         if (count >0)
         {
             self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d",count];
+            self.navigationItem.title = [NSString stringWithFormat:@"消息(%d)",count];
         }else
         {
             self.tabBarItem.badgeValue = nil;
+            self.navigationItem.title = @"消息";
         }
-        
     });
 }
 
 - (void)dealloc
 {
-    NSLog(@"主界面释放");
+    NSLog(@"消息界面释放");
     
     [_wSocket.nearMessageList removeAllObjects];
     [[NSNotificationCenter defaultCenter]removeObserver:self];
@@ -132,6 +135,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -174,7 +178,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, kDeviceWidth, kDeviceHeight-64) style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kDeviceWidth, kDeviceHeight) style:UITableViewStylePlain];
     _tableView.backgroundColor = [UIColor whiteColor];
     _tableView.estimatedRowHeight = kCellHeight;
     _tableView.showsVerticalScrollIndicator = NO;
@@ -185,11 +189,26 @@
     _tableView.delegate = self;
     [self.view addSubview:_tableView];
     
+    MBProgressHUD *hud = [self creatNavBarMBPHud];
     _wSocket.nearMessageList = [[NSMutableArray alloc]initWithArray:[_wSocket.lbxManager getAllMessage]];
+    [hud hide:YES afterDelay:0.5];
     
 }
 
 #pragma mark - View创建工具
+-(MBProgressHUD *)creatNavBarMBPHud
+{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.navigationBar animated:YES];
+    hud.margin = 0.5;
+    hud.xOffset = -50;
+    hud.dimBackground = NO;
+    hud.color = [UIColor clearColor];
+    hud.activityIndicatorColor = [UIColor purpleColor];
+    hud.transform = CGAffineTransformMakeScale(0.57,0.57);
+    hud.removeFromSuperViewOnHide = NO;
+    
+    return hud;
+}
 
 #pragma mark - 点击事件
 -(void)goChatVC:(WJID *)uJid isSelectedInexPath:(BOOL)isSelected

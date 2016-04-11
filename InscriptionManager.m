@@ -315,7 +315,7 @@
     if (isHasNetwork == NO) {
         WSocket *wSocket = [WSocket sharedWSocket];
         wSocket.isLoginOK = NO;
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"updateOnlineStatus" object:@"0"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateOnlineStatus object:@"0"];
         
     }
     return isHasNetwork;
@@ -353,7 +353,6 @@
 
 -(MBProgressHUD *)ShowHubProgress:(NSString *)text
 {
-
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if (_HUD)
@@ -371,6 +370,7 @@
         _HUD.labelText = text;
         _HUD.labelFont = [UIFont systemFontOfSize:13];
         [_HUD show:YES];
+        
     });
     return _HUD;
 }
@@ -378,24 +378,28 @@
 ///显示指示器 在普通的View上 actionIndex==0 显示 其它隐藏
 -(void)showHubAction:(NSInteger)actionIndex showView:(UIView *)showView
 {
-    if (actionIndex ==0&&_HUD) {
-        [_HUD hide:YES];
-        [_HUD removeFromSuperview];
+    if (actionIndex ==0&&_HUD)
+    {
+        [_HUD removeFromSuperViewOnHide];
         _HUD = nil;
+        NSLog(@"111");
     }
-    if (actionIndex==0&&_HUD==nil) {
+    
+    if (actionIndex==0&&_HUD==nil)
+    {
         _HUD = [[MBProgressHUD alloc]initWithView:showView];
         _HUD.margin = 15.0f;
         _HUD.dimBackground = NO;
-        _HUD.mode = MBProgressHUDModeText;
+        _HUD.mode =MBProgressHUDModeIndeterminate;
         _HUD.userInteractionEnabled = NO;
         [showView addSubview:_HUD];
-    }
-    else
+        NSLog(@"222");
+    }else
     {
         [_HUD hide:YES];
         [_HUD removeFromSuperview];
         _HUD = nil;
+        NSLog(@"333");
     }
 }
 

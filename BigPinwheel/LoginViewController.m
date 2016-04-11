@@ -10,6 +10,7 @@
 #import "InscriptionManager.h"
 #import "WSocket.h"
 #import "ForgetPassWordStep1.h"
+#import <MBProgressHUD.h>
 
 
 @interface LoginViewController ()
@@ -21,6 +22,9 @@
 @property(strong,nonatomic)UIButton *forgetPwdBtn;    //忘记密码按钮
 
 @property(assign,nonatomic)NSInteger length;          //手机号码长度
+
+@property(strong,nonatomic)NSTimer *saveTimer;        //保存按钮Timer
+@property(assign,nonatomic)NSInteger timerCount;     //timer计时器
 
 @property(strong,nonatomic)InscriptionManager *inspManager;
 
@@ -38,6 +42,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if (!_saveTimer)
+    {
+        _saveTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(statusChange:) userInfo:nil repeats:YES];
+        [_saveTimer setFireDate:[NSDate distantFuture]];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -69,9 +79,12 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
     [self.view endEditing:YES];
+    
     self.navigationController.interactivePopGestureRecognizer.enabled =YES;
+    
+    [_saveTimer invalidate];
+    _saveTimer = nil;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -107,9 +120,7 @@
         [[NSUserDefaults standardUserDefaults]synchronize];
         
         [self initSelfInfo];
-        [weakSocket.lbxManager showHudViewLabelText:@"登录成功" detailsLabelText:nil afterDelay:1];
         [weakSelf.navigationController popToRootViewControllerAnimated:YES];
-        
     });
     
 }
@@ -143,6 +154,7 @@
     self = [super init];
     if (self)
     {
+        _timerCount = 0;
         _inspManager = [InscriptionManager sharedManager];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(loginSuccess:) name:kLoginSuccess object:nil];
         
@@ -397,6 +409,15 @@
     [self.navigationItem setHidesBackButton:YES];
     [_loginBtn setEnabled:NO];
     
+    if (_saveTimer)
+    {
+        [_saveTimer setFireDate:[NSDate distantPast]];
+    }else
+    {
+        _saveTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(statusChange:) userInfo:nil repeats:YES];
+    }
+    
+    [inspManger showHubAction:0 showView:self.view];
     NSString *username = [_phoneTF.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSString *passward = [_passwardTF.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     
@@ -415,6 +436,7 @@
             {
                 [weakSocket showAlertWithTag:success];
                 
+                [weakSelf.saveTimer setFireDate:[NSDate distantFuture]];
                 [weakBtn setEnabled:YES];
                 [weakSocket.lbxManager showHubAction:1 showView:self.view];
                 weakSelf.navigationController.interactivePopGestureRecognizer.enabled =YES;
@@ -428,13 +450,30 @@
     }];
 }
 
+/*计时器监听事件*/
+-(void)statusChange:(NSTimer *)timer
+{
+    if (_timerCount > 30)
+    {
+        _timerCount = 0;
+        [_saveTimer setFireDate:[NSDate distantFuture]];
+        [_loginBtn setEnabled:YES];
+        [[InscriptionManager sharedManager]showHubAction:1 showView:self.view];
+        [[InscriptionManager sharedManager]showHudViewLabelText:@"登录失败，请重新登录" detailsLabelText:nil afterDelay:1];
+    }
+    else
+    {
+        [_loginBtn setEnabled:NO];
+    }
+    _timerCount ++;
+}
+
 
 //忘记密码点击事件
 -(void)forgetPwdLabelClicked
 {
     ForgetPassWordStep1 *step1=[[ForgetPassWordStep1 alloc]init];
     [self.navigationController pushViewController:step1 animated:YES];
-    
     
 }
 

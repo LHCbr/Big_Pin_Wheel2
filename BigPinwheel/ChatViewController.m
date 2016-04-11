@@ -409,7 +409,7 @@
         // 添加好友删除我的通知
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteMe:) name:kDeleteMe object:nil];
         // 添加更改状态的通知
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateOnlineStatus:) name:@"updateOnlineStatus" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateOnlineStatus:) name:kUpdateOnlineStatus object:nil];
 
     }
     return self;

@@ -129,6 +129,8 @@ static WSocket *wSocket = nil;
                 password = @"";
             }
         }
+        
+        NSLog(@"1username = %@,password = %@",username,password);
 
         if (username.length > 0 && password.length > 0) {
             __weak WSocket *weakSocket = wSocket;
@@ -159,7 +161,7 @@ static WSocket *wSocket = nil;
                 password = @"";
             }
         }
-        
+                
         if (username.length > 0 && password.length > 0) {
             __weak WSocket *weakSocket = wSocket;
             [wSocket logining:username password:password isAuto:YES loginBlock:^(int success) {
@@ -282,7 +284,7 @@ int im_callback(uint32_t _iFun, char *_pcJsonString, uint32_t _iJsonLen, char *_
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:kLoginSuccess object:nil];
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"updateOnlineStatus" object:@"1"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateOnlineStatus object:@"1"];
                 
             }
             if (wSocket.loginSuccess) {
@@ -794,12 +796,12 @@ int im_callback(uint32_t _iFun, char *_pcJsonString, uint32_t _iJsonLen, char *_
                 NSLog(@"连接失效了");
             }
             wSocket.isLoginOK = NO;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"updateOnlineStatus" object:@"0"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateOnlineStatus object:@"0"];
             break;
         }
         case IM_STATE_NO_LOGIN:
         {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"updateOnlineStatus" object:@"0"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateOnlineStatus object:@"0"];
             static int count = 0;
             if (count%3 == 0) {
                 if (_lbxManager.wJid.phone.length && _lbxManager.wJid.password.length) {
@@ -1010,11 +1012,10 @@ int im_callback(uint32_t _iFun, char *_pcJsonString, uint32_t _iJsonLen, char *_
 {
     if (tag == kConnectNoNetwork) {
         [[InscriptionManager sharedManager] showHudViewLabelText:@"无网络链接" detailsLabelText:nil afterDelay:1];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"updateOnlineStatus" object:@"2"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateOnlineStatus object:@"0"];
         wSocket.isLoginOK = NO;
     } else if (tag == kRequestFailed) {
-//        [[LBXManager sharedManager] showHudViewLabelText:@"连接中..." detailsLabelText:nil afterDelay:3];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"updateOnlineStatus" object:@"0"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateOnlineStatus object:@"0"];
         wSocket.isLoginOK = NO;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3.0*NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             if (wSocket.isLoginOK == NO) {
@@ -2195,7 +2196,8 @@ static int firstCountTwo = 0;
 /// 再次发送文字
 - (void)resendText:(ChatObject *)object isAddWaitMessage:(BOOL)isAdd isAddRemind:(BOOL)isAddRemind
 {
-    if (wSocket.isLoginOK == NO) {
+    if (wSocket.isLoginOK == NO)
+    {
         if ([wSocket.lbxManager checkIsHasNetwork:YES] == NO) {
             return;
         }

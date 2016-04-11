@@ -122,7 +122,7 @@
     NSString *new_version = [_verision_dict objectForKey:@"version"];
     NSString *compulsory_version = [_verision_dict objectForKey:@"importanttip"];
     NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleNameKey];
-    appName = @"freechat";
+    appName = @"大丰车";
 
     NSLog(@"current_version = %@",current_version);
     NSLog(@"new_version = %@",new_version);

@@ -27,6 +27,9 @@
 		4F1C1E791C7716910016EE88 /* TableBarBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C1E781C7716910016EE88 /* TableBarBtn.m */; };
 		4F1C1E7C1C77198A0016EE88 /* myTableBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C1E7B1C77198A0016EE88 /* myTableBarView.m */; };
 		4F1CCCD81C71CA6A0026340E /* NameCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1CCCD71C71CA6A0026340E /* NameCardViewController.m */; };
+		4F1FD7D71CB862D600F89EB3 /* HomePageHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FD7D61CB862D600F89EB3 /* HomePageHeaderView.m */; };
+		4F1FD7E01CB866D600F89EB3 /* HomeFarmerListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FD7DF1CB866D600F89EB3 /* HomeFarmerListCell.m */; };
+		4F1FD7E31CB866FA00F89EB3 /* HomeDriverListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FD7E21CB866FA00F89EB3 /* HomeDriverListCell.m */; };
 		4F248F4A1CB674C60071AF6E /* crc32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F248EFA1CB674C60071AF6E /* crc32.cpp */; };
 		4F248F4B1CB674C60071AF6E /* 接口.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4F248EFD1CB674C60071AF6E /* 接口.txt */; };
 		4F248F4C1CB674C60071AF6E /* epool_connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F248EFE1CB674C60071AF6E /* epool_connection.cpp */; };
@@ -61,6 +64,8 @@
 		4F248F691CB674C60071AF6E /* t_time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F248F441CB674C60071AF6E /* t_time.cpp */; };
 		4F248F6A1CB674C60071AF6E /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F248F461CB674C60071AF6E /* util.cpp */; };
 		4F248F6B1CB674C60071AF6E /* zipbuf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F248F481CB674C60071AF6E /* zipbuf.cpp */; };
+		4F259EDD1CB6B5A200327416 /* HomePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F259EDC1CB6B5A200327416 /* HomePageViewController.m */; };
+		4F259EE01CB6B5B600327416 /* MineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F259EDF1CB6B5B600327416 /* MineViewController.m */; };
 		4F3211FA1C8E603600C32DA5 /* Address.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3211F41C8E603600C32DA5 /* Address.m */; };
 		4F3211FB1C8E603600C32DA5 /* DYCAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3211F61C8E603600C32DA5 /* DYCAddress.m */; };
 		4F3211FC1C8E603600C32DA5 /* DYCAddressPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3211F81C8E603600C32DA5 /* DYCAddressPickerView.m */; };
@@ -443,6 +448,12 @@
 		4F1C1E7B1C77198A0016EE88 /* myTableBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = myTableBarView.m; sourceTree = "<group>"; };
 		4F1CCCD61C71CA6A0026340E /* NameCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameCardViewController.h; sourceTree = "<group>"; };
 		4F1CCCD71C71CA6A0026340E /* NameCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameCardViewController.m; sourceTree = "<group>"; };
+		4F1FD7D51CB862D600F89EB3 /* HomePageHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomePageHeaderView.h; sourceTree = "<group>"; };
+		4F1FD7D61CB862D600F89EB3 /* HomePageHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomePageHeaderView.m; sourceTree = "<group>"; };
+		4F1FD7DE1CB866D600F89EB3 /* HomeFarmerListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeFarmerListCell.h; sourceTree = "<group>"; };
+		4F1FD7DF1CB866D600F89EB3 /* HomeFarmerListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeFarmerListCell.m; sourceTree = "<group>"; };
+		4F1FD7E11CB866FA00F89EB3 /* HomeDriverListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeDriverListCell.h; sourceTree = "<group>"; };
+		4F1FD7E21CB866FA00F89EB3 /* HomeDriverListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeDriverListCell.m; sourceTree = "<group>"; };
 		4F248EF91CB674C60071AF6E /* auto_lock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = auto_lock.h; sourceTree = "<group>"; };
 		4F248EFA1CB674C60071AF6E /* crc32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crc32.cpp; sourceTree = "<group>"; };
 		4F248EFB1CB674C60071AF6E /* crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc32.h; sourceTree = "<group>"; };
@@ -522,6 +533,10 @@
 		4F248F471CB674C60071AF6E /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
 		4F248F481CB674C60071AF6E /* zipbuf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zipbuf.cpp; sourceTree = "<group>"; };
 		4F248F491CB674C60071AF6E /* zipbuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zipbuf.h; sourceTree = "<group>"; };
+		4F259EDB1CB6B5A200327416 /* HomePageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomePageViewController.h; sourceTree = "<group>"; };
+		4F259EDC1CB6B5A200327416 /* HomePageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomePageViewController.m; sourceTree = "<group>"; };
+		4F259EDE1CB6B5B600327416 /* MineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineViewController.h; sourceTree = "<group>"; };
+		4F259EDF1CB6B5B600327416 /* MineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineViewController.m; sourceTree = "<group>"; };
 		4F3211F31C8E603600C32DA5 /* Address.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Address.h; sourceTree = "<group>"; };
 		4F3211F41C8E603600C32DA5 /* Address.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Address.m; sourceTree = "<group>"; };
 		4F3211F51C8E603600C32DA5 /* DYCAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DYCAddress.h; sourceTree = "<group>"; };
@@ -1165,6 +1180,39 @@
 			path = json;
 			sourceTree = "<group>";
 		};
+		4F259ED81CB6B4CC00327416 /* Version1.0 */ = {
+			isa = PBXGroup;
+			children = (
+				4F259ED91CB6B4EA00327416 /* HomePage */,
+				4F259EDA1CB6B56F00327416 /* Mine */,
+			);
+			name = Version1.0;
+			sourceTree = "<group>";
+		};
+		4F259ED91CB6B4EA00327416 /* HomePage */ = {
+			isa = PBXGroup;
+			children = (
+				4F259EDB1CB6B5A200327416 /* HomePageViewController.h */,
+				4F259EDC1CB6B5A200327416 /* HomePageViewController.m */,
+				4F1FD7D51CB862D600F89EB3 /* HomePageHeaderView.h */,
+				4F1FD7D61CB862D600F89EB3 /* HomePageHeaderView.m */,
+				4F1FD7DE1CB866D600F89EB3 /* HomeFarmerListCell.h */,
+				4F1FD7DF1CB866D600F89EB3 /* HomeFarmerListCell.m */,
+				4F1FD7E11CB866FA00F89EB3 /* HomeDriverListCell.h */,
+				4F1FD7E21CB866FA00F89EB3 /* HomeDriverListCell.m */,
+			);
+			name = HomePage;
+			sourceTree = "<group>";
+		};
+		4F259EDA1CB6B56F00327416 /* Mine */ = {
+			isa = PBXGroup;
+			children = (
+				4F259EDE1CB6B5B600327416 /* MineViewController.h */,
+				4F259EDF1CB6B5B600327416 /* MineViewController.m */,
+			);
+			name = Mine;
+			sourceTree = "<group>";
+		};
 		4F3211F21C8E603600C32DA5 /* DYHPickerView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1581,6 +1629,7 @@
 		4F7B91F81C4896B5003FBE3A /* BigPinwheel */ = {
 			isa = PBXGroup;
 			children = (
+				4F259ED81CB6B4CC00327416 /* Version1.0 */,
 				4F6283E81C7D53A7000296D3 /* Login */,
 				4F59B0571C4DD29200DE20C2 /* Home */,
 				4F1992051C77365000275BD8 /* Contact */,
@@ -2378,6 +2427,7 @@
 				4F248F631CB674C60071AF6E /* t_file.cpp in Sources */,
 				4FEC1A621C97F01F005266DE /* VoiceConverter.mm in Sources */,
 				4F6282FF1C7B44EC000296D3 /* LeftTableViewCell.m in Sources */,
+				4F1FD7D71CB862D600F89EB3 /* HomePageHeaderView.m in Sources */,
 				4F6283031C7B44EC000296D3 /* RightTableViewCell.m in Sources */,
 				4FFDF6D11C9FED830073AA66 /* TipView.m in Sources */,
 				4F248F5E1CB674C60071AF6E /* ringbuf.cpp in Sources */,
@@ -2395,6 +2445,7 @@
 				4F1316FF1CA97087008B3F90 /* UserInfoViewController.m in Sources */,
 				4FD1F2151C48CBDA00EE10CE /* MyCustom.m in Sources */,
 				4F6282DE1C7B44E3000296D3 /* ExpressionView.m in Sources */,
+				4F259EDD1CB6B5A200327416 /* HomePageViewController.m in Sources */,
 				4F6283211C7B52C8000296D3 /* GetModel.m in Sources */,
 				4F1C1E7C1C77198A0016EE88 /* myTableBarView.m in Sources */,
 				4F62830E1C7B44FB000296D3 /* NearMessageObject.m in Sources */,
@@ -2415,6 +2466,7 @@
 				4F3769171C55FECD00DDC4A9 /* CLPlaceBtn.m in Sources */,
 				4FD6986B1C89E87E006836CF /* addFriendsCell.m in Sources */,
 				4F5FAAA21C7DD18000D8C1B8 /* M80AttributedLabelURL.m in Sources */,
+				4F1FD7E31CB866FA00F89EB3 /* HomeDriverListCell.m in Sources */,
 				4FF707551C84A429004DA79D /* signBtn.m in Sources */,
 				4FED90361C4CE5A200075657 /* LBXKeychain.m in Sources */,
 				4F59B05B1C4E009100DE20C2 /* HomeViewController.m in Sources */,
@@ -2431,10 +2483,12 @@
 				4F0E2E2E1C741F71003718AE /* NameCardHeaderView.m in Sources */,
 				4F248F5F1CB674C60071AF6E /* t_base.cpp in Sources */,
 				4F9A95291CA6AD9100BBB8D5 /* SettingsViewController.m in Sources */,
+				4F259EE01CB6B5B600327416 /* MineViewController.m in Sources */,
 				4FF707441C828708004DA79D /* ProfileAvatarCell.m in Sources */,
 				4F5FAAC81C8032BB00D8C1B8 /* VerficationCodeViewController.m in Sources */,
 				4F248F5C1CB674C60071AF6E /* Rc4Encrypt.cpp in Sources */,
 				4F5BA18F1CA9906E00D72031 /* CusFriendCell.m in Sources */,
+				4F1FD7E01CB866D600F89EB3 /* HomeFarmerListCell.m in Sources */,
 				4F248F5B1CB674C60071AF6E /* network.cpp in Sources */,
 				4F248F531CB674C60071AF6E /* ImMsg.cpp in Sources */,
 				4F10AD6A1C7863B50041923E /* FindFrinedsViewController.m in Sources */,

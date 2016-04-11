@@ -54,6 +54,7 @@
     self = [super init];
     if (self)
     {
+        _logOutIndex = 0;
     }
     return self;
 }
@@ -113,20 +114,21 @@
     }
     if (alertView.tag ==3)
     {
-        __weak WSocket *weakSocket = _wSocket;
         __weak SettingsViewController *weakSelf = self;
         [[WSocket sharedWSocket]logOutIsSuccess:^(int success) {
-            [weakSocket showAlertWithTag:success];
-            if (success ==0) {
-                [weakSelf logOutSuccess];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    LoginHomeViewController *loginHomeVC = [[LoginHomeViewController alloc]init];
-                    [weakSelf.navigationController pushViewController:loginHomeVC animated:NO];
-                });
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (success==0)
+                {
+                    [weakSelf logOutSuccess];
+                }
+            });
         }];
         
-        if (_logOutTimer) {
+        if (_logOutTimer)
+        {
+            [_logOutTimer setFireDate:[NSDate distantPast]];
+        }else
+        {
             _logOutTimer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(logOutTime) userInfo:nil repeats:YES];
         }
     }

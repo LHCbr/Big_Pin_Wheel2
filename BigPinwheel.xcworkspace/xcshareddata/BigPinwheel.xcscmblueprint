@@ -1,18 +1,20 @@
 {
-  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "0A1C9EE87B64AB407B3041403B8E53C8F3A71720",
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "57BBB60B673FCEA7E627E6ABC9EC81E31FB2518C",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "3D657F40ED5C4F80C9D3B66AC54E22B23FEAFC49" : 0,
+    "D975CB9C9E644DE458A5E8796E1516AC78C6A9B2" : 0,
     "0A1C9EE87B64AB407B3041403B8E53C8F3A71720" : 0,
-    "D975CB9C9E644DE458A5E8796E1516AC78C6A9B2" : 0
+    "57BBB60B673FCEA7E627E6ABC9EC81E31FB2518C" : 0,
+    "3D657F40ED5C4F80C9D3B66AC54E22B23FEAFC49" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "EE5B5533-78E4-4383-9BD2-390C817E6CE0",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "3D657F40ED5C4F80C9D3B66AC54E22B23FEAFC49" : "DFC\/",
+    "D975CB9C9E644DE458A5E8796E1516AC78C6A9B2" : "lulu_client\/",
     "0A1C9EE87B64AB407B3041403B8E53C8F3A71720" : "Big_Pin_Wheel\/",
-    "D975CB9C9E644DE458A5E8796E1516AC78C6A9B2" : "lulu_client\/"
+    "57BBB60B673FCEA7E627E6ABC9EC81E31FB2518C" : "BPWVersion1.0\/",
+    "3D657F40ED5C4F80C9D3B66AC54E22B23FEAFC49" : "DFC\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "BigPinwheel",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -27,6 +29,11 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/LHCbr\/BiPinwheel.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "3D657F40ED5C4F80C9D3B66AC54E22B23FEAFC49"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/LHCbr\/Big_Pin_Wheel2.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "57BBB60B673FCEA7E627E6ABC9EC81E31FB2518C"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/git.oschina.net\/blackoto\/lulu_client",

@@ -7,13 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RootViewController.h"
+#import "HomePageViewController.h"
+#import "HomeViewController.h"
+#import "MineViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
-@property (strong, nonatomic)RootViewController *rootVC;
+@property (strong, nonatomic)HomePageViewController *homePageVC;
+@property (strong, nonatomic)HomeViewController *messageVC;
+@property (strong, nonatomic)MineViewController *mineVC;
+@property (strong, nonatomic)UITabBarController *tabarC;
 
 
 @end

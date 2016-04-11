@@ -143,6 +143,8 @@ enum FriendType {
 
 
 
+
+
 #pragma mark -Pop动画效果
 ///POPBasicAnimation
 -(POPBasicAnimation *)creatAnimationWithPropName:(NSString *)propName FunctionName:(NSString *)functionName FromValue:(NSValue *)fromValue ToValue:(NSValue*)toValue Duration:(CGFloat)duration;
