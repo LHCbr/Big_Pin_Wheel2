@@ -389,6 +389,7 @@
 		7BACB09A2D13300A0FF56B99 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18903E619F4125E1C1A87FE8 /* libPods.a */; };
 		DA33BDF41CAE0D8D00086FB8 /* pinyin.m in Sources */ = {isa = PBXBuildFile; fileRef = DA33BDF21CAE0D8D00086FB8 /* pinyin.m */; };
 		DA33BDF71CAE0E2B00086FB8 /* PhoneContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA33BDF51CAE0E2B00086FB8 /* PhoneContactViewController.m */; };
+		DA5104BF1CBCD52C00B09AF9 /* AMap.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DA5104BE1CBCD52C00B09AF9 /* AMap.bundle */; };
 		DA947BD71CACEB6700511793 /* Foundation+Log.m in Sources */ = {isa = PBXBuildFile; fileRef = DA947BD61CACEB6700511793 /* Foundation+Log.m */; };
 		DA947BDA1CACF71200511793 /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = DA947BD91CACF71200511793 /* UIView+Extension.m */; };
 /* End PBXBuildFile section */
@@ -975,6 +976,7 @@
 		DA33BDF31CAE0D8D00086FB8 /* pinyin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pinyin.h; sourceTree = "<group>"; };
 		DA33BDF51CAE0E2B00086FB8 /* PhoneContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneContactViewController.m; sourceTree = "<group>"; };
 		DA33BDF61CAE0E2B00086FB8 /* PhoneContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneContactViewController.h; sourceTree = "<group>"; };
+		DA5104BE1CBCD52C00B09AF9 /* AMap.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = AMap.bundle; path = Pods/AMap2DMap/MAMapKit.framework/AMap.bundle; sourceTree = "<group>"; };
 		DA947BD61CACEB6700511793 /* Foundation+Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Foundation+Log.m"; sourceTree = "<group>"; };
 		DA947BD81CACF71200511793 /* UIView+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
 		DA947BD91CACF71200511793 /* UIView+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
@@ -1334,6 +1336,7 @@
 		4F6048FC1C48BA9F001B3C68 /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				DA5104BE1CBCD52C00B09AF9 /* AMap.bundle */,
 				DA947BD81CACF71200511793 /* UIView+Extension.h */,
 				DA947BD91CACF71200511793 /* UIView+Extension.m */,
 				DA947BD61CACEB6700511793 /* Foundation+Log.m */,
@@ -2146,7 +2149,7 @@
 				TargetAttributes = {
 					4F7B91F51C4896B4003FBE3A = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = 9Y39J7Y97K;
+						DevelopmentTeam = GZYYEQ3L4N;
 					};
 					4F7B920E1C4896B5003FBE3A = {
 						CreatedOnToolsVersion = 7.2;
@@ -2282,6 +2285,7 @@
 				4FEEAB361C86E710006B4AF4 /* face_038.png in Resources */,
 				4F6282C11C7B34EA000296D3 /* 0222_edit@2x.png in Resources */,
 				4FEEAB711C86E710006B4AF4 /* face_097.png in Resources */,
+				DA5104BF1CBCD52C00B09AF9 /* AMap.bundle in Resources */,
 				4FEEAB4D1C86E710006B4AF4 /* face_061.png in Resources */,
 				4FEEAB481C86E710006B4AF4 /* face_056.png in Resources */,
 				4FEEAB631C86E710006B4AF4 /* face_083.png in Resources */,
