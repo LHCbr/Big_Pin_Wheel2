@@ -432,6 +432,20 @@
     return 1;
 }
 
+/*根据经纬度测算距离*/
+-(double)calculateDistanceBaseStartLongitude:(float)longitude0 latitude:(float)latitude0 denstiLongitude:(float)longitude1 latitude:(float)latitude1
+{
+    CLLocation *startLocation = [[CLLocation alloc]initWithLatitude:latitude0 longitude:longitude0];
+    CLLocation *denstiLocation = [[CLLocation alloc]initWithLatitude:latitude1 longitude:longitude1];
+    
+    CLLocationDistance distance = [startLocation distanceFromLocation:denstiLocation];
+    
+    return distance;
+    
+}
+
+
+
 #pragma mark -用户权限的判断 
 
 /// 是否可以使用相机
@@ -756,6 +770,7 @@
     ChatObject *object = [[ChatObject alloc] init];
     [object setValuesForKeysWithDictionary:dict];
     return object;
+    
 }
 
 

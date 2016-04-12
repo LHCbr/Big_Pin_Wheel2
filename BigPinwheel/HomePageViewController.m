@@ -46,6 +46,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:NO];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -76,18 +77,6 @@
     {
         _wSocket = [WSocket sharedWSocket];
         _dataArray = [[NSMutableArray alloc]init];
-        
-        NSMutableArray *temp1 = [NSMutableArray arrayWithArray:@[@"1",@"2"]];
-        NSMutableArray *temp2 = [NSMutableArray arrayWithArray:@[@"3",@"4"]];
-        
-        [temp2 addObjectsFromArray:temp1];
-        
-        NSLog(@"temp =%@",temp2);
-        
-        
-        
-        
-        
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(refreshSomeView:) name:kLoginSuccess object:nil];
     }
     return self;

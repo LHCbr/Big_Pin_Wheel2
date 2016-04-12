@@ -369,6 +369,7 @@
 		4FEEABAA1C86E789006B4AF4 /* 1111_liaotian_shengyin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEEABA91C86E789006B4AF4 /* 1111_liaotian_shengyin@2x.png */; };
 		4FEEABAC1C86E790006B4AF4 /* 1111_liaotian_paizhao@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEEABAB1C86E790006B4AF4 /* 1111_liaotian_paizhao@2x.png */; };
 		4FEEABAE1C86E97E006B4AF4 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FEEABAD1C86E97E006B4AF4 /* CoreAudio.framework */; };
+		4FEFEF981CBC966E00ABA172 /* MineHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FEFEF971CBC966E00ABA172 /* MineHeaderView.m */; };
 		4FF0CCDE1C8A6BD400AD1EA6 /* addTelContBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF0CCDD1C8A6BD400AD1EA6 /* addTelContBtn.m */; };
 		4FF0D7051C85966E0012376A /* 0230_select@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FF0D7031C85966E0012376A /* 0230_select@2x.png */; };
 		4FF0D7061C85966E0012376A /* 0230_unselect@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FF0D7041C85966E0012376A /* 0230_unselect@2x.png */; };
@@ -941,6 +942,8 @@
 		4FEEABA91C86E789006B4AF4 /* 1111_liaotian_shengyin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1111_liaotian_shengyin@2x.png"; sourceTree = "<group>"; };
 		4FEEABAB1C86E790006B4AF4 /* 1111_liaotian_paizhao@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1111_liaotian_paizhao@2x.png"; sourceTree = "<group>"; };
 		4FEEABAD1C86E97E006B4AF4 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		4FEFEF961CBC966E00ABA172 /* MineHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineHeaderView.h; sourceTree = "<group>"; };
+		4FEFEF971CBC966E00ABA172 /* MineHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineHeaderView.m; sourceTree = "<group>"; };
 		4FF0CCDC1C8A6BD400AD1EA6 /* addTelContBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = addTelContBtn.h; sourceTree = "<group>"; };
 		4FF0CCDD1C8A6BD400AD1EA6 /* addTelContBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = addTelContBtn.m; sourceTree = "<group>"; };
 		4FF0D7031C85966E0012376A /* 0230_select@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "0230_select@2x.png"; sourceTree = "<group>"; };
@@ -1209,6 +1212,8 @@
 			children = (
 				4F259EDE1CB6B5B600327416 /* MineViewController.h */,
 				4F259EDF1CB6B5B600327416 /* MineViewController.m */,
+				4FEFEF961CBC966E00ABA172 /* MineHeaderView.h */,
+				4FEFEF971CBC966E00ABA172 /* MineHeaderView.m */,
 			);
 			name = Mine;
 			sourceTree = "<group>";
@@ -2450,6 +2455,7 @@
 				4F1C1E7C1C77198A0016EE88 /* myTableBarView.m in Sources */,
 				4F62830E1C7B44FB000296D3 /* NearMessageObject.m in Sources */,
 				4F248F4D1CB674C60071AF6E /* file_waiting_confirm.cpp in Sources */,
+				4FEFEF981CBC966E00ABA172 /* MineHeaderView.m in Sources */,
 				4F3211FA1C8E603600C32DA5 /* Address.m in Sources */,
 				4F62835F1C7C53CE000296D3 /* AddViewController.m in Sources */,
 				4F248F681CB674C60071AF6E /* t_rand.cpp in Sources */,

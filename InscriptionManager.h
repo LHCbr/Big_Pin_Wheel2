@@ -138,11 +138,10 @@ enum FriendType {
 /// 是否可以使用通讯录
 - (BOOL)isCanAddressBook;
 
-
 -(MBProgressHUD *)ShowHubProgress:(NSString *)text;
 
-
-
+/*根据经纬度测算距离*/
+-(double)calculateDistanceBaseStartLongitude:(float)longitude0 latitude:(float)latitude0 denstiLongitude:(float)longitude1 latitude:(float)latitude1;
 
 
 #pragma mark -Pop动画效果
