@@ -30,6 +30,9 @@
 @property(copy,nonatomic)NSString *phone_show_flag;
 @property(copy,nonatomic)NSString *user_id;
 @property(copy,nonatomic)NSString *address;
+@property(copy,nonatomic)NSString *car_num;
+@property(copy,nonatomic)NSString *car_img;
+@property(copy,nonatomic)NSString *auth_flag;
 
 @property(strong,nonatomic)NSMutableArray *quoted_price_list;
 

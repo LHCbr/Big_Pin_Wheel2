@@ -263,24 +263,16 @@ updatingLocation:(BOOL)updatingLocation
     CLLocationCoordinate2D stop_location = [_fDiversView.mapView convertPoint:CGPointMake(_fDiversView.mapView.frame.size.width, _fDiversView.mapView.frame.size.height) toCoordinateFromView:_fDiversView.mapView];
     NSLog(@"x1 = %f,x2 = %f,y1 = %f,y2 = %f",start_location.longitude,stop_location.longitude,stop_location.latitude,start_location.latitude);
     
-    [[WSocket sharedWSocket]GetDriversByDriveriX1:start_location.longitude iX2:stop_location.longitude iY1:stop_location.latitude iY2:start_location.latitude pageNum:0 pageSize:20 GetDriversByDriversBlock:^(int ret, NSDictionary *rootDict) {
-        if (ret == kConnectFailue)
-        {
+    [[WSocket sharedWSocket]GetRangeDriverStartLongitude:start_location.longitude StartLatitude:start_location.latitude EndLongitude:stop_location.longitude EndLatitude:stop_location.latitude pageSize:10 GetRangeDriversBlock:^(int ret, NSDictionary *roodDcit) {
+        if (ret == kConnectFailue) {
             NSLog(@"请求失败，请重试");
-        } else {
-            NSLog(@"请求成功了, 数据是 %@",rootDict);
-            [self addBig:rootDict];
+        }
+        else
+        {
+            [self addBig:roodDcit];
+            NSLog(@"请求成功了，数据是 %@",roodDcit);
         }
     }];
-//    [[WSocket sharedWSocket]GetDriversByDriveriX1:114.007000 iX2:117.006000 iY1:35.003000 iY2:40.008000 pageNum:0 pageSize:10 GetDriversByDriversBlock:^(int ret, NSDictionary *rootDict) {
-//        if (ret ==kConnectFailue) {
-//            NSLog(@"33");
-//        }
-//        else{
-//            NSLog(@"rootdic1111 = %@",rootDict);
-//            [self addBig:rootDict];
-//        }
-//    }];
 }
 
 #pragma mark - 地图搜索的所有功能

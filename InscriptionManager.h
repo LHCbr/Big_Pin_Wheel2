@@ -151,8 +151,6 @@ enum FriendType {
 ///POPSpringAnimation
 -(POPSpringAnimation *)creatSpringAnimationWithPropName:(NSString *)aName ToValue:(NSValue *)toValue SpringBounciness:(CGFloat)bounciness SpringSpeed:(CGFloat)springSpeed;
 
-#pragma mark -数据库的方法操作
-
 #pragma mark -聊天的方法
 /// 完整的存入一条消息
 - (void)saveChatMessageWithObject:(ChatObject *)object;

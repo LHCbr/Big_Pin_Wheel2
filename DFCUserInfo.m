@@ -33,6 +33,9 @@
         _phone = @"";
         _user_id = @"";
         _address = @"";
+        _car_num = @"";
+        _car_img = @"";
+        _auth_flag = @"";
         _quoted_price_list = [[NSMutableArray alloc]init];
         
     }

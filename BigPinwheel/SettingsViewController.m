@@ -166,6 +166,7 @@
     [[NSNotificationCenter defaultCenter]postNotificationName:kLogOutNotification object:nil];
 
     [self.tableView setContentOffset:CGPointZero animated:YES];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark - UITabelViewDelegate

@@ -271,10 +271,6 @@ int im_callback(uint32_t _iFun, char *_pcJsonString, uint32_t _iJsonLen, char *_
                 // 获取好友，粉丝，关注个数
                 [wSocket getAllTypeFriendCount];
                 
-                //获取所有农民列表  identity暂时为司机
-                [wSocket QueryUsersByLocationIsAllCity:0 Sex:-1 Identity:2 Province:@"" City:@"" PriceStart:0 PriceEnd:65534 PageNum:0 PageSize:10 DfcQueryUsersByLocationBlock:^(int ret, NSMutableArray *filtedList) {
-                }];
-
                 // 上传自己的token
                 if (wSocket.deviceToken.length) {
                     NSLog(@"login ok token = %@",wSocket.deviceToken);
@@ -358,46 +354,22 @@ int im_callback(uint32_t _iFun, char *_pcJsonString, uint32_t _iJsonLen, char *_
             break;
         }
             
-        case IM_FUN_DFC_QUERY_USERS_BY_LOC:
+        case IM_FUN_DFC_QUERY_NEARBY_USERS:
         {
-            NSLog(@"QueryByLocDict= %@",rootDict);
-            
-            if (ret>=0)
-            {
-                NSString *hasMore = [NSString stringWithFormat:@"%@",[rootDict objectForKey:@"has_more"]];
-                NSString *cur_idx = [NSString stringWithFormat:@"%@",[rootDict objectForKey:@"cur_idx"]];
-                
-                if ([hasMore intValue]==1){
-                    
-                }else{
-                    ret =500;
-                }
-                
-                [wSocket.lbxManager saveTheLastFilteredFarmlist:rootDict Cur_idx:[cur_idx intValue]];
-                NSMutableArray *filterlist = [NSMutableArray arrayWithArray:[wSocket.lbxManager getTheLastFilterFarmListWithCuridx:[cur_idx intValue]]];
-                
-                if (wSocket.DfcQueryUsersByLocationSuccess)
-                {
-                    wSocket.DfcQueryUsersByLocationSuccess(int(ret),filterlist);
-                }
-            }else
-            {
-                if (wSocket.DfcQueryUsersByLocationSuccess)
-                {
-                    wSocket.DfcQueryUsersByLocationSuccess(int(ret),nil);
-                }
+            if (wSocket.GetNearByUserSuccess) {
+                wSocket.GetNearByUserSuccess(int(ret),rootDict);
             }
-             wSocket.DfcQueryUsersByLocationSuccess = nil;
-               break;
-        }
+            wSocket.GetNearByUserSuccess = nil;
+            break;
+         }
             
         case IM_FUN_DFC_QUERY_DRIVERS:
         {
-            if (wSocket.GetDriversByDriverSuccess)
+            if (wSocket.GetRangeDriverSuccess)
             {
-                wSocket.GetDriversByDriverSuccess(int(ret),rootDict);
+                wSocket.GetRangeDriverSuccess(int(ret),rootDict);
             }
-            wSocket.GetDriversByDriverSuccess = nil;
+            wSocket.GetRangeDriverSuccess = nil;
             break;
         }
             
@@ -1560,12 +1532,18 @@ int im_callback(uint32_t _iFun, char *_pcJsonString, uint32_t _iJsonLen, char *_
     char *pcRegion =  [self stringToChar:region];
     int pcPrice = [price intValue]/100;
     
-    if (im_c_DriverQuotedPrice(pcProvince, pcCity, pcRegion,pcPrice)==kConnectFailue)
-    {
-        if (_driverQuotedPriceSuccess) {
-            _driverQuotedPriceSuccess(kConnectFailue);
-        }
-    }
+//    if (im_c_DriverQuotedPrice(0, pcProvince, pcCity, pcRegion, , pcPrice)==kConnectFailue) {
+//        if (<#condition#>) {
+//            <#statements#>
+//        }
+//    }
+    
+//    if (im_c_DriverQuotedPrice(pcProvince, pcCity, pcRegion,pcPrice)==kConnectFailue)
+//    {
+//        if (_driverQuotedPriceSuccess) {
+//            _driverQuotedPriceSuccess(kConnectFailue);
+//        }
+//    }
     
 }
 
@@ -1592,59 +1570,50 @@ int im_callback(uint32_t _iFun, char *_pcJsonString, uint32_t _iJsonLen, char *_
             _DelQuotedPriceSuccess(kConnectFailue);
         }
     }
-    
 }
 
-/*根据指定条件获取大丰车用户列表*/
--(void)QueryUsersByLocationIsAllCity:(int)isGetAllCity Sex:(int)sex Identity:(int)identity Province:(NSString *)province City:(NSString *)city PriceStart:(int)priceStart PriceEnd:(int)priceEnd PageNum:(int)pageNum PageSize:(int)pageSize DfcQueryUsersByLocationBlock:(DfcQueryUsersByLocationBlock)DfcQueryUsersByLocationSuccess
+/*通过手动上传经纬度或者城市选项获取附近的人*/
+-(void)GetNearByUsersIsCoordinate:(BOOL)isCoordinate Longitude:(float)longitude Latitude:(float)latitude Identity:(int)identity Province:(NSString *)province City:(NSString *)city PageSize:(int)pageSize GetNearByUsersBlock:(GetNearByUsersBlock) GetNearByUserSuccess
 {
-    
-    if ([_lbxManager checkIsHasNetwork:YES]== NO)
-    {
-        DfcQueryUsersByLocationSuccess(kConnectNoNetwork,nil);
+    if ([_lbxManager checkIsHasNetwork:YES]==NO) {
+        GetNearByUserSuccess(kConnectNoNetwork,nil);
         return;
     }
     
-    if (_isLoginOK == NO)
-    {
-        DfcQueryUsersByLocationSuccess(kRequestFailed,nil);
-        [wSocket showAlertWithTag:kRequestFailed];
-        return;
-    }
-    _DfcQueryUsersByLocationSuccess = DfcQueryUsersByLocationSuccess;
-    
-    char *prov = [wSocket stringToChar:province];
-    char *cities = [wSocket stringToChar:city];
-    
-    if (im_c_DfcQueryUsersByLocation(isGetAllCity, sex, identity,prov,cities,priceStart,priceEnd,pageNum,pageSize)== kConnectFailue)
-    {
-        if (_DfcQueryUsersByLocationSuccess)
-        {
-            _DfcQueryUsersByLocationSuccess(kRequestFailed,nil);
-        }
-    }
-}
-
-/*通过位置信息获取大丰车当前矩形内的所有司机列表*/
--(void)GetDriversByDriveriX1:(float)ix1 iX2:(float)ix2 iY1:(float)iy1 iY2:(float)iy2 pageNum:(int)pageNum pageSize:(int)pageSize GetDriversByDriversBlock:(GetDriversByDriverBlock)GetDriversByDriverSuccess
-{
-    if ([_lbxManager checkIsHasNetwork:YES]==NO)
-    {
-        GetDriversByDriverSuccess(kConnectNoNetwork,nil);
-        return;
-    }
-    if (_isLoginOK ==NO)
-    {
-        GetDriversByDriverSuccess(kRequestFailed,nil);
+    if (_isLoginOK == NO) {
+        GetNearByUserSuccess(kRequestFailed,nil);
         [wSocket showAlertWithTag:kRequestFailed];
         return;
     }
     
-    _GetDriversByDriverSuccess = GetDriversByDriverSuccess;
+    _GetNearByUserSuccess = GetNearByUserSuccess;
     
-    if (im_c_GetDriversByDriver(ix1, ix2, iy1, iy2, pageNum, pageSize)==kConnectFailue)
-    {
-        _GetDriversByDriverSuccess(kRequestFailed,nil);
+    char *pcProvince = [wSocket stringToChar:province];
+    char *pcCity = [wSocket stringToChar:city];
+    
+    if (im_c_GetNearbyUsers(isCoordinate,longitude ,latitude, identity, pcProvince, pcCity, pageSize) == kConnectFailue) {
+        _GetNearByUserSuccess(kRequestFailed,nil);
+    }
+}
+
+/*获取当前矩阵范围内的所有司机列表*/
+-(void)GetRangeDriverStartLongitude:(float)longitude0 StartLatitude:(float)latitude0 EndLongitude:(float)longitude1  EndLatitude:(float)latitude1 pageSize:(int)pageSize GetRangeDriversBlock:(GetRangeDriversBlock) GetRangeDriverSuccess
+{
+    if ([_lbxManager checkIsHasNetwork:YES]==NO) {
+        GetRangeDriverSuccess(kConnectNoNetwork,nil);
+        return;
+    }
+    
+    if (_isLoginOK == NO) {
+        GetRangeDriverSuccess(kRequestFailed,nil);
+        [wSocket showAlertWithTag:kRequestFailed];
+        return;
+    }
+    
+    _GetRangeDriverSuccess = GetRangeDriverSuccess;
+    
+    if (im_c_GetRangeDrivers(longitude0, longitude1, latitude1, latitude0, pageSize) == kConnectFailue) {
+        _GetRangeDriverSuccess(kRequestFailed,nil);
     }
 }
 

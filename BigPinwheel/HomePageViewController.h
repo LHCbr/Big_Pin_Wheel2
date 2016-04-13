@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HPHeaderView.h"
 
-@interface HomePageViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@interface HomePageViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,HPHeaderViewDelegate>
 
 @property(strong,nonatomic)UITableView *tableView;
 @property(strong,nonatomic)NSMutableArray *dataArray;
+
 
 @end

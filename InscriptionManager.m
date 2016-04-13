@@ -674,7 +674,7 @@
     
     //建立大风车用户基本信息表
     if ([_dbConnect isTableOK:kDFCUserinfoTableName]==NO) {
-        NSString *creatDFCUserInfoTableSql = [NSString stringWithFormat:@"CREATE TABLE '%@'('id' INTEGER PRIMARY KEY  AUTOINCREMENT NOT NULL, 'area_code' TEXT default '(null)','phone_num' TEXT default '(null)','sex' TEXT default '(null)','identity' TEXT default '(null)','nick_name' TEXT default '(null)', 'head_portrait' TEXT default '(null)','signature' TEXT default '(null)','birthday' TEXT default '(null)','phone_show_flag' TEXT default '(null)','phone' TEXT default '(null)','country' TEXT default '(null)' , 'province' TEXT default '(null)','city' TEXT default '(null)','region' TEXT default '(null)','remaining_addr' TEXT default '(null)','longitude' TEXT default '(null)','latitude' TEXT default '(null)','postion_update_time' TEXT default '(null)');",kDFCUserinfoTableName];
+        NSString *creatDFCUserInfoTableSql = [NSString stringWithFormat:@"CREATE TABLE '%@'('id' INTEGER PRIMARY KEY  AUTOINCREMENT NOT NULL, 'area_code' TEXT default '(null)','phone_num' TEXT default '(null)','sex' TEXT default '(null)','identity' TEXT default '(null)','nick_name' TEXT default '(null)', 'head_portrait' TEXT default '(null)','signature' TEXT default '(null)','birthday' TEXT default '(null)','phone_show_flag' TEXT default '(null)','phone' TEXT default '(null)','country' TEXT default '(null)' , 'province' TEXT default '(null)','city' TEXT default '(null)','region' TEXT default '(null)','remaining_addr' TEXT default '(null)','longitude' TEXT default '(null)','latitude' TEXT default '(null)','postion_update_time' TEXT default '(null)','car_num' TEXT default '(null)','car_img' TEXT default '(null)','auth_flag' TEXT default '(null)');",kDFCUserinfoTableName];
         [_dbConnect createTableSql:creatDFCUserInfoTableSql];
     }
     //建立大风车司机报价表
@@ -1106,7 +1106,7 @@
     
     if (count ==0)
     {
-        NSString *insertSql = [NSString stringWithFormat:@"INSERT INTO %@ (area_code,phone_num,sex,identity,nick_name,head_portrait,signature,birthday,phone_show_flag,phone,country,province,city,region,remaining_addr,longitude,latitude,postion_update_time)values('%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",kDFCUserinfoTableName,info.area_code,info.phone_num,info.sex,info.identity,info.nick_name,[self replaceFanXieGang:YES string:info.head_portrait],info.signature,info.birthday,info.phone_show_flag,info.phone,info.country,info.provice,info.city,info.region,info.remaining_addr,info.longitude,info.latitude,info.postion_update_time];
+        NSString *insertSql = [NSString stringWithFormat:@"INSERT INTO %@ (area_code,phone_num,sex,identity,nick_name,head_portrait,signature,birthday,phone_show_flag,phone,country,province,city,region,remaining_addr,longitude,latitude,postion_update_time,car_num,car_img,auth_flag)values('%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",kDFCUserinfoTableName,info.area_code,info.phone_num,info.sex,info.identity,info.nick_name,[self replaceFanXieGang:YES string:info.head_portrait],info.signature,info.birthday,info.phone_show_flag,info.phone,info.country,info.provice,info.city,info.region,info.remaining_addr,info.longitude,info.latitude,info.postion_update_time,info.car_num,info.car_img,info.auth_flag];
         [[DBConnect shareConnect]executeInsertSql:insertSql];
         
         if (info.quoted_price_list.count>0)
@@ -1123,7 +1123,7 @@
     }
     else
     {
-        NSString *updateSql = [NSString stringWithFormat:@"UPDATE %@ SET area_code = '%@', sex = '%@', identity = '%@',nick_name = '%@', head_portrait = '%@', signature = '%@',birthday = '%@',phone_show_flag = '%@',phone = '%@',country = '%@',province = '%@',city = '%@',region = '%@',remaining_addr = '%@',longitude = '%@',latitude = '%@',postion_update_time = '%@' WHERE phone_num = '%@'",kDFCUserinfoTableName,info.area_code,info.sex,info.identity,info.nick_name,[self replaceFanXieGang:YES string:info.head_portrait],info.signature,info.birthday,info.phone_show_flag,info.phone,info.country,info.provice,info.city,info.region,info.remaining_addr,info.longitude,info.latitude,info.postion_update_time, info.phone_num];
+        NSString *updateSql = [NSString stringWithFormat:@"UPDATE %@ SET area_code = '%@', sex = '%@', identity = '%@',nick_name = '%@', head_portrait = '%@', signature = '%@',birthday = '%@',phone_show_flag = '%@',phone = '%@',country = '%@',province = '%@',city = '%@',region = '%@',remaining_addr = '%@',longitude = '%@',latitude = '%@',postion_update_time = '%@',car_num = '%@', car_img = '%@', auth_flag = '%@' WHERE phone_num = '%@'",kDFCUserinfoTableName,info.area_code,info.sex,info.identity,info.nick_name,[self replaceFanXieGang:YES string:info.head_portrait],info.signature,info.birthday,info.phone_show_flag,info.phone,info.country,info.provice,info.city,info.region,info.remaining_addr,info.longitude,info.latitude,info.postion_update_time, info.phone_num,info.car_num,info.car_img,info.auth_flag];
         
         
         [[DBConnect shareConnect]executeUpdateSql:updateSql];

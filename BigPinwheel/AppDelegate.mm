@@ -35,7 +35,7 @@
     [WSocket sharedWSocket];
     
     NSDictionary *attributeDict = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor grayColor],NSForegroundColorAttributeName,[UIFont fontWithName:@"Helvetica" size:11] ,NSFontAttributeName, nil];
-    NSDictionary *selectAttriDict = [NSDictionary dictionaryWithObjectsAndKeys:kThemeColor,NSForegroundColorAttributeName,[UIFont fontWithName:@"Helvetica" size:11],NSFontAttributeName, nil];
+    NSDictionary *selectAttriDict = [NSDictionary dictionaryWithObjectsAndKeys:COLOR(54, 175, 160, 1),NSForegroundColorAttributeName,[UIFont fontWithName:@"Helvetica" size:11],NSFontAttributeName, nil];
     
     _homePageVC = [[HomePageViewController alloc]init];
     UITabBarItem *tabarItem1 = [[UITabBarItem alloc]initWithTitle:@"首页" image:nil selectedImage:nil];
@@ -53,7 +53,6 @@
     nav2.tabBarItem = tabarItem2;
     nav3.tabBarItem = tabarItem3;
     
-    nav1.navigationBarHidden = YES;
     nav3.navigationBarHidden = YES;
     
     [[UITabBarItem appearance]setTitleTextAttributes:attributeDict forState:UIControlStateNormal];

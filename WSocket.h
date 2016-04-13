@@ -200,17 +200,16 @@ typedef void(^DelQuotedPriceBlock)(int success);
 @property (copy,nonatomic)DelQuotedPriceBlock DelQuotedPriceSuccess;
 -(void)DelQuotedPriceWithId:(NSString *)idQuotedPrice DelQuotedPriceBlock:(DelQuotedPriceBlock)delQuotedPriceSuccess;
 
-///通过位置获取当前矩阵的所有司机列表
-typedef void(^DfcQueryUsersByLocationBlock)(int ret,NSMutableArray *filtedList);
-@property(copy,nonatomic)DfcQueryUsersByLocationBlock DfcQueryUsersByLocationSuccess;
--(void)QueryUsersByLocationIsAllCity:(int)isGetAllCity Sex:(int)sex Identity:(int)identity Province:(NSString *)province
-                                City:(NSString *)city PriceStart:(int)priceStart PriceEnd:(int)priceEnd PageNum:(int)pageNum PageSize:(int)pageSize DfcQueryUsersByLocationBlock:(DfcQueryUsersByLocationBlock)DfcQueryUsersByLocationSuccess;
 
-/////通过位置信息获取大丰车当前矩形内的所有司机列表
-typedef void(^GetDriversByDriverBlock)(int ret,NSDictionary *rootDict);
-@property(copy,nonatomic)GetDriversByDriverBlock GetDriversByDriverSuccess;
--(void)GetDriversByDriveriX1:(float)ix1 iX2:(float)ix2 iY1:(float)iy1 iY2:(float)iy2 pageNum:(int)pageNum pageSize:(int)pageSize GetDriversByDriversBlock:(GetDriversByDriverBlock)GetDriversByDriverSuccess;
+/*通过手动上传经纬度或者城市选项获取附近的人*/
+typedef void(^GetNearByUsersBlock)(int ret,NSDictionary *rootDict);
+@property(copy,nonatomic)GetNearByUsersBlock GetNearByUserSuccess;
+-(void)GetNearByUsersIsCoordinate:(BOOL)isCoordinate Longitude:(float)longitude Latitude:(float)latitude Identity:(int)identity Province:(NSString *)province City:(NSString *)city PageSize:(int)pageSize GetNearByUsersBlock:(GetNearByUsersBlock) GetNearByUserSuccess;
 
+/*获取当前矩阵范围内的所有司机列表*/
+typedef void(^GetRangeDriversBlock)(int ret ,NSDictionary *rootDict);
+@property(copy,nonatomic)GetRangeDriversBlock GetRangeDriverSuccess;
+-(void)GetRangeDriverStartLongitude:(float)longitude0 StartLatitude:(float)latitude0 EndLongitude:(float)longitude1  EndLatitude:(float)latitude1 pageSize:(int)pageSize GetRangeDriversBlock:(GetRangeDriversBlock) GetRangeDriverSuccess;
 
 #pragma mark - 发送消息相关
 /// 收到消息

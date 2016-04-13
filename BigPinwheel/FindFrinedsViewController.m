@@ -281,19 +281,19 @@
         }
         NSLog(@" 地区:%d 性别:%d 身份:%d 省份:%@ 城市:%@ %d-%d",_place,_sex,_identity,Province,City,_fromprice,_endprice);
         
-        __weak FindFrinedsViewController *weakSelf = self;
-        [[WSocket sharedWSocket]QueryUsersByLocationIsAllCity:_place Sex:_sex Identity:_identity Province:Province City:City PriceStart:_fromprice PriceEnd:_endprice PageNum:0 PageSize:10 DfcQueryUsersByLocationBlock:^(int ret, NSMutableArray *filtedList) {
-            if (ret>=0) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    weakSelf.dataArray = [NSMutableArray arrayWithArray:filtedList];
-                    NSLog(@"weakdataArray = %@",weakSelf.dataArray);
-                    [_tableView reloadData];
-                });
-            }else
-            {
-                NSLog(@"ret = %d",ret);
-            }
-        }];
+//        __weak FindFrinedsViewController *weakSelf = self;
+//        [[WSocket sharedWSocket]QueryUsersByLocationIsAllCity:_place Sex:_sex Identity:_identity Province:Province City:City PriceStart:_fromprice PriceEnd:_endprice PageNum:0 PageSize:10 DfcQueryUsersByLocationBlock:^(int ret, NSMutableArray *filtedList) {
+//            if (ret>=0) {
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    weakSelf.dataArray = [NSMutableArray arrayWithArray:filtedList];
+//                    NSLog(@"weakdataArray = %@",weakSelf.dataArray);
+//                    [_tableView reloadData];
+//                });
+//            }else
+//            {
+//                NSLog(@"ret = %d",ret);
+//            }
+//        }];
     [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
     }else if (sender.tag ==1)
     {
@@ -330,27 +330,27 @@
         
         int identity = [[propArray objectAtIndex:2]isEqualToString:@"农民"] ? 1 : 2;
         
-        __weak WSocket *weakSocket = _wSocket;
-        __weak FindFrinedsViewController *weakSelf = self;
-        [_wSocket QueryUsersByLocationIsAllCity:getAllCity Sex:sex Identity:identity Province:province City:city PriceStart:0 PriceEnd:65534 PageNum:0 PageSize:10 DfcQueryUsersByLocationBlock:^(int ret, NSMutableArray *filtedList) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                if (ret>=0)
-                {
-                    [hud hide:YES];
-                    [weakSocket.lbxManager showHubAction:1 showView:nil];
-                    weakSelf.dataArray = [NSMutableArray arrayWithArray:filtedList];
-                    [_tableView reloadData];
-                    NSLog(@"刷新成功");
-                }
-                else
-                {
-                    [hud hide:YES];
-                    [weakSocket.lbxManager showHubAction:1 showView:nil];
-                    NSLog(@"刷新失败 ,ret = %d",ret);
-                }
-            });
-        }];
+//        __weak WSocket *weakSocket = _wSocket;
+//        __weak FindFrinedsViewController *weakSelf = self;
+//        [_wSocket QueryUsersByLocationIsAllCity:getAllCity Sex:sex Identity:identity Province:province City:city PriceStart:0 PriceEnd:65534 PageNum:0 PageSize:10 DfcQueryUsersByLocationBlock:^(int ret, NSMutableArray *filtedList) {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                
+//                if (ret>=0)
+//                {
+//                    [hud hide:YES];
+//                    [weakSocket.lbxManager showHubAction:1 showView:nil];
+//                    weakSelf.dataArray = [NSMutableArray arrayWithArray:filtedList];
+//                    [_tableView reloadData];
+//                    NSLog(@"刷新成功");
+//                }
+//                else
+//                {
+//                    [hud hide:YES];
+//                    [weakSocket.lbxManager showHubAction:1 showView:nil];
+//                    NSLog(@"刷新失败 ,ret = %d",ret);
+//                }
+//            });
+//        }];
     }
 }
 
