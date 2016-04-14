@@ -2149,7 +2149,7 @@
 				TargetAttributes = {
 					4F7B91F51C4896B4003FBE3A = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = 9Y39J7Y97K;
+						DevelopmentTeam = GZYYEQ3L4N;
 					};
 					4F7B920E1C4896B5003FBE3A = {
 						CreatedOnToolsVersion = 7.2;
